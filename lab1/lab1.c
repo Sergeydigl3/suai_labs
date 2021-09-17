@@ -14,7 +14,7 @@ int main()
             if (x > maxx || maxx == 0)
                 maxx = x;
         };
-    };
+    }
     printf("%d", maxx);
     return 0;
 }
