@@ -5,8 +5,8 @@ int main()
     scanf_s("%d", &x);
     while (x > 0)
     {
-        otvet = x % 2 * i + otvet;
-        i = i * 10;
+        otvet += x % 2 * i;
+        i *= 10;
         x /= 2;
     }
     printf("%d", otvet);

@@ -32,7 +32,7 @@ int main()
             
             
         };
-    };
+    }
     printf("%d", maxx);
     return 0;
 }
