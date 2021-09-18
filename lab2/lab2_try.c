@@ -21,7 +21,6 @@ int main(int argc, char const *argv[])
     for (int v=0; v<size; v++){
         if (str[v]!='\0' && str[v]!='\n'){
             int st_char = is_char(str[v]);
-
             if (prev_state==1 && st_char==0){
                 selected_word +=1;
                 selected_char = 0;
@@ -30,8 +29,6 @@ int main(int argc, char const *argv[])
                 wordsl[selected_word][selected_char] = str[v];
                 selected_char++;
             }
-
-
             prev_state = st_char;
         }
             

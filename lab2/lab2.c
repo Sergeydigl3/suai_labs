@@ -9,28 +9,43 @@ int main(int argc, char const *argv[])
 
     int otvets[10] = {0};
 
-    printf("Строка: ");
+    printf("Stroka: ");
     fgets(str, size + 1, stdin);
     fflush(stdin);
-    // TODO: Make Len Size for  (for cycle)
-    printf("Образец поиска: ");
+    size = strlen(str, size);
+
+    printf("Obr search: ");
     fgets(obr, size_obr + 1, stdin);
     fflush(stdin);
+    size_obr = strlen(obr, size_obr);
 
-    int obr_pos = 0;
-    for (int i = 0; i < size; i++)
-    {
-        if (
-            (is_char(str[i])==1) && (is_char(obr[i])==1) && (str[i] == obr[obr_pos]))
-        {
-            obr_pos++;
-        }
+    printf("Similar: %d", check_example(str, obr, size_obr, 0));
+    // for (int i = 0; i < size; i++)
+    // {   
         
-        if (str[i] != obr[obr_pos]){
-            obr_pos = 0;
-            printf("Позиция %d", i);
+    //     // check_example();
+    // }
+}
+
+// 1 - Similar
+// 0 - Not similar
+int check_example(char *str, char *obr, int size_obr, int st_pos){
+    for (int i=0;i<size_obr;i++){
+        if (
+            str[st_pos+i] != obr[i]
+            ){
+            return 0;
         }
     }
+    return 1;
+}
+
+int strlen(char *str, int dlinna){
+    for (int i=0;i<dlinna;i++){
+        if (str[i]=='\0' || str[i]=='\n')
+            return i;
+    }
+    return dlinna;
 }
 
 int is_not_free(char *mass, int dlina)
