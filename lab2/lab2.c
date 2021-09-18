@@ -19,13 +19,23 @@ int main(int argc, char const *argv[])
     fflush(stdin);
     size_obr = strlen(obr, size_obr);
 
-    printf("Similar: %d", check_example(str, obr, size_obr, 0));
-    // for (int i = 0; i < size; i++)
-    // {   
-        
-    //     // check_example();
-    // }
+
+    for (int i = 0; i < size; i++)
+    {   
+        if (size-i<size_obr){
+            break;
+        }
+        else{
+
+            // Check word 
+            if (check_example(str, obr, size_obr, i)==1){
+                printf("Found: %d\n", i);
+            }
+
+        }
+    }
 }
+
 
 // 1 - Similar
 // 0 - Not similar
