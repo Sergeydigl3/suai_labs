@@ -19,40 +19,43 @@ int main(int argc, char const *argv[])
     fflush(stdin);
     size_obr = strlen(obr, size_obr);
 
-
     for (int i = 0; i < size; i++)
-    {   
-        if (size-i<size_obr){
+    {
+        if (size - i < size_obr)
+        {
             break;
         }
-        else{
-
-            // Check word 
-            if (check_example(str, obr, size_obr, i)==1){
+        else
+        {
+            // Check word
+            if (check_example(str, obr, size_obr, i) == 1)
+            {
                 printf("Found: %d\n", i);
             }
-
         }
     }
 }
 
-
 // 1 - Similar
 // 0 - Not similar
-int check_example(char *str, char *obr, int size_obr, int st_pos){
-    for (int i=0;i<size_obr;i++){
+int check_example(char *str, char *obr, int size_obr, int st_pos)
+{
+    for (int i = 0; i < size_obr; i++)
+    {
         if (
-            str[st_pos+i] != obr[i]
-            ){
+            str[st_pos + i] != obr[i])
+        {
             return 0;
         }
     }
     return 1;
 }
 
-int strlen(char *str, int dlinna){
-    for (int i=0;i<dlinna;i++){
-        if (str[i]=='\0' || str[i]=='\n')
+int strlen(char *str, int dlinna)
+{
+    for (int i = 0; i < dlinna; i++)
+    {
+        if (str[i] == '\0' || str[i] == '\n')
             return i;
     }
     return dlinna;
