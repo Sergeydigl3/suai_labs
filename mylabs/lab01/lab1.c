@@ -14,14 +14,12 @@ int main()
             break;
         else
         {
-
             if (hod==1)
             {
                 x = prev + sx;
                 printf("Prev: %d;Sec: %d; Duo: %d\n", prev, sx, prev+sx);
                 if (x > maxx || maxx == 0)
                     maxx = x;
-
                 hod = 0;
             }
             else
