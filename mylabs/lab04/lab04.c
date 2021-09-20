@@ -32,8 +32,9 @@ void sort_int(int *mass, int size, int revert)
         }
 }
 
-void sort_str(char **mass, int size, int word_size, int revert)
+void sort_str(char ** mass, int size, int word_size, int revert)
 {
+
     if (revert == 1)
     {
         for (int j = 0; j < size; j++)
@@ -41,6 +42,7 @@ void sort_str(char **mass, int size, int word_size, int revert)
 
             for (int i = (size - 1); i > j; i--)
             {   
+                
                 int pr_s = strlen(mass[i - 1], word_size);
                 int ns_s = strlen(mass[i], word_size);
                 
@@ -112,6 +114,7 @@ int main(int argc, char const *argv[])
     }
     
     sort_str(wordsl, word_count, word_size,0);
+
     for(int i=0;i<word_count;i++){
         if (is_not_free(wordsl[i], word_size)==1)
 
@@ -123,6 +126,7 @@ int main(int argc, char const *argv[])
 
 int strlen(char *str, int dlinna)
 {
+    print_array(str, dlinna);
     for (int i = 0; i < dlinna; i++)
     {
         if (str[i] == '\0' || str[i] == '\n')
@@ -130,6 +134,18 @@ int strlen(char *str, int dlinna)
     }
     return dlinna;
 }
+
+int print_array(int x[], int len)
+{
+    int k;
+
+    for (k = 0; k < len; k++)
+    {
+        printf("x[%d] = %d\n", k, x[k]);
+    }
+    return 0;
+}
+
 
 int is_not_free(char* mass, int dlina){
     for(int x=0; x<dlina;x++){
