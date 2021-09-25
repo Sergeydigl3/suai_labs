@@ -75,6 +75,50 @@ void sort_str(char (*mass)[WORDSL_Y], int size, int word_size, int revert)
         }
 }
 
+int strlen(char *str, int dlinna)
+{
+    // print_array(str, dlinna);
+    for (int i = 0; i < dlinna; i++)
+    {
+        if (str[i] == '\0' || str[i] == '\n')
+            return i;
+    }
+    return dlinna;
+}
+
+int print_array(int x[], int len)
+{
+    int k;
+
+    for (k = 0; k < len; k++)
+    {
+        printf("x[%d] = %d\n", k, x[k]);
+    }
+    return 0;
+}
+
+
+int is_not_free(char* mass, int dlina){
+    for(int x=0; x<dlina;x++){
+        if (mass[x]!='\0')
+            return 1;
+    }
+    return 0;
+}
+
+int is_char(int ch){
+    if ( 
+        (65<=ch&&ch<=90) || (97<=ch&&ch<=122)
+        ||
+        (128<=ch&&ch<=175) || (224<=ch&&ch<=239)
+    )
+        return 1;
+    else
+        return 0;
+
+}
+
+
 int main(int argc, char const *argv[])
 {
     int size = WORDSL_Y*WORDSL_X;
@@ -124,45 +168,3 @@ int main(int argc, char const *argv[])
     return 0;
 }
 
-int strlen(char *str, int dlinna)
-{
-    // print_array(str, dlinna);
-    for (int i = 0; i < dlinna; i++)
-    {
-        if (str[i] == '\0' || str[i] == '\n')
-            return i;
-    }
-    return dlinna;
-}
-
-int print_array(int x[], int len)
-{
-    int k;
-
-    for (k = 0; k < len; k++)
-    {
-        printf("x[%d] = %d\n", k, x[k]);
-    }
-    return 0;
-}
-
-
-int is_not_free(char* mass, int dlina){
-    for(int x=0; x<dlina;x++){
-        if (mass[x]!='\0')
-            return 1;
-    }
-    return 0;
-}
-
-int is_char(int ch){
-    if ( 
-        (65<=ch&&ch<=90) || (97<=ch&&ch<=122)
-        ||
-        (128<=ch&&ch<=175) || (224<=ch&&ch<=239)
-    )
-        return 1;
-    else
-        return 0;
-
-}
