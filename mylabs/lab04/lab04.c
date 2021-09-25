@@ -1,4 +1,6 @@
 #include <stdio.h>
+#define WORDSL_X 15 // Word count
+#define WORDSL_Y 20 // Max length
 
 void sort_int(int *mass, int size, int revert)
 {
@@ -32,9 +34,8 @@ void sort_int(int *mass, int size, int revert)
         }
 }
 
-void sort_str(char ** mass, int size, int word_size, int revert)
+void sort_str(char (*mass)[WORDSL_Y], int size, int word_size, int revert)
 {
-
     if (revert == 1)
     {
         for (int j = 0; j < size; j++)
@@ -48,7 +49,7 @@ void sort_str(char ** mass, int size, int word_size, int revert)
                 
                 if (pr_s < ns_s)
                 {
-                    char *temp = mass[i - 1];
+                    char temp[WORDSL_Y] = mass[i - 1];
                     mass[i - 1] = mass[i];
                     mass[i] = temp;
                 }
@@ -64,8 +65,9 @@ void sort_str(char ** mass, int size, int word_size, int revert)
                 int ns_s = strlen(mass[i], word_size);
                 
                 if (pr_s > ns_s)
-                {
-                    char *temp = mass[i - 1];
+                {   
+                    
+                    char temp[WORDSL_Y] = mass[i - 1];
                     mass[i - 1] = mass[i];
                     mass[i] = temp;
                 }
@@ -75,8 +77,8 @@ void sort_str(char ** mass, int size, int word_size, int revert)
 
 int main(int argc, char const *argv[])
 {
-    int size = 300;
-    char str[300] = {0};
+    int size = WORDSL_Y*WORDSL_X;
+    char str[WORDSL_Y*WORDSL_X] = {0};
     fgets(str, size+1, stdin);
     fflush(stdin);
     
@@ -86,9 +88,7 @@ int main(int argc, char const *argv[])
     // y - max word length
     // 15 - words
     // 20 - max length
-    char wordsl[15][20]={0};
-    int word_size = 20;
-    int word_count = 15;
+    char wordsl[WORDSL_X][WORDSL_Y]={0};
 
     int selected_word=0;
     int selected_char=0;
@@ -113,10 +113,10 @@ int main(int argc, char const *argv[])
             
     }
     
-    sort_str(wordsl, word_count, word_size,0);
+    sort_str(wordsl, WORDSL_X, WORDSL_Y,0);
 
-    for(int i=0;i<word_count;i++){
-        if (is_not_free(wordsl[i], word_size)==1)
+    for(int i=0;i<WORDSL_X;i++){
+        if (is_not_free(wordsl[i], WORDSL_Y)==1)
 
             
             printf("%s  ", wordsl[i]);
@@ -126,7 +126,7 @@ int main(int argc, char const *argv[])
 
 int strlen(char *str, int dlinna)
 {
-    print_array(str, dlinna);
+    // print_array(str, dlinna);
     for (int i = 0; i < dlinna; i++)
     {
         if (str[i] == '\0' || str[i] == '\n')
