@@ -191,46 +191,62 @@ int main(int argc, char const *argv[])
     char str[WORDSL_Y * WORDSL_X] = {0};
     fgets(str, size + 1, stdin);
     fflush(stdin);
+    int coun[240] = {0};
+    for(int i=0; i<size+1;i++){
+        if (is_char(str[i])==1){
+            coun[str[i]]+=1;
+        }
+    }
+    int lenstr = strlen(str,240);
+    for(int i=0;i<240; i++){
+        if(coun[i]>0){
+            float tchar = coun[i];
+            float chance = tchar/lenstr;
+            printf("%c %d %f\n ", i, coun[i],chance);
+        }
+            
+    }
+
 
     // wordsl[x][y]
     // x - words count
     // y - max word length
     // 15 - words
     // 20 - max length
-    char wordsl[WORDSL_X][WORDSL_Y] = {0};
+    // char wordsl[WORDSL_X][WORDSL_Y] = {0};
 
-    int selected_word = 0;
-    int selected_char = 0;
-    int prev_state = 0;
+    // int selected_word = 0;
+    // int selected_char = 0;
+    // int prev_state = 0;
 
-    for (int v = 0; v < size; v++)
-    {
-        if (str[v] != '\0' && str[v] != '\n')
-        {
-            int st_char = is_char(str[v]);
+    // for (int v = 0; v < size; v++)
+    // {
+    //     if (str[v] != '\0' && str[v] != '\n')
+    //     {
+    //         int st_char = is_char(str[v]);
 
-            if (prev_state == 1 && st_char == 0)
-            {
-                selected_word += 1;
-                selected_char = 0;
-            }
-            if (st_char == 1)
-            {
-                wordsl[selected_word][selected_char] = str[v];
-                selected_char++;
-            }
+    //         if (prev_state == 1 && st_char == 0)
+    //         {
+    //             selected_word += 1;
+    //             selected_char = 0;
+    //         }
+    //         if (st_char == 1)
+    //         {
+    //             wordsl[selected_word][selected_char] = str[v];
+    //             selected_char++;
+    //         }
 
-            prev_state = st_char;
-        }
-    }
+    //         prev_state = st_char;
+    //     }
+    // }
 
-    sort_str(wordsl, WORDSL_X, WORDSL_Y, 0);
+    // sort_str(wordsl, WORDSL_X, WORDSL_Y, 0);
 
-    for (int i = 0; i < WORDSL_X; i++)
-    {
-        if (is_not_free(wordsl[i], WORDSL_Y) == 1)
+    // for (int i = 0; i < WORDSL_X; i++)
+    // {
+    //     if (is_not_free(wordsl[i], WORDSL_Y) == 1)
 
-            printf("%s ", wordsl[i]);
-    }
+    //         printf("%s ", wordsl[i]);
+    // }
     return 0;
 }
