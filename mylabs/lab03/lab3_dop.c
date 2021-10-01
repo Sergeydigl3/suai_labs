@@ -36,7 +36,7 @@ void find_extr(int mass[], int len)
         if (i != len - 1)
             next = mass[i + 1];
 
-        //more
+        //upper
         if (prev > mass[i] && next > mass[i])
             printf("%d\n", mass[i]);
 
@@ -49,7 +49,7 @@ void find_extr(int mass[], int len)
 
 int main(int argc, char const *argv[])
 {
-    int tmass[] = {4, 2, 6, 8, 7, 3, 3, 2, 2};
+    int tmass[] = {4, 2, 6, 8, 7, 3, 3, 1, 2};
     int size = 9;
 
     find_extr(tmass, size);
