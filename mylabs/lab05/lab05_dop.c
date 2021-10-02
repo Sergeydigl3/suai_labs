@@ -34,7 +34,7 @@ void sort_int(int *mass, int size, int revert)
         }
 }
 
-void sort_str(char (*mass)[WORDSL_Y], int size, int word_size, int revert)
+void sort_str_length(char (*mass)[WORDSL_Y], int size, int word_size, int revert)
 {
     if (revert == 1)
     {
@@ -120,6 +120,92 @@ void sort_str(char (*mass)[WORDSL_Y], int size, int word_size, int revert)
         }
 }
 
+void sort_str_alph(char (*mass)[WORDSL_Y], int size, int word_size, int revert)
+{
+    if (revert == 0)
+    {
+        for (int j = 0; j < size; j++)
+        {
+
+            for (int i = (size - 1); i > j; i--)
+            {
+
+                // int pr_s = strlen(mass[i - 1], word_size);
+                // int ns_s = strlen(mass[i], word_size);
+
+                if (check_alphabet(mass[i], mass[i-1], word_size,0))
+                {
+
+                    int f1 = i;
+                    int f2 = i - 1;
+                    char temp[WORDSL_Y] = {0};
+                    //copying f2
+                    for (int i = 0; i < WORDSL_Y; i++)
+                    {
+                        temp[i] = mass[f2][i];
+                    }
+
+                    //rewrite f2 form f1
+                    for (int i = 0; i < WORDSL_Y; i++)
+                    {
+                        mass[f2][i] = mass[f1][i];
+                    }
+
+                    //rewrite f1 from temp
+                    for (int i = 0; i < WORDSL_Y; i++)
+                    {
+                        mass[f1][i] = temp[i];
+                    }
+
+                    // mass_exchange(mass, i, i - 1);
+
+                    // char temp[WORDSL_Y] = mass[i - 1];
+                    // mass[i - 1] = mass[i];
+                    // mass[i] = temp;
+                }
+            }
+        }
+    }
+    else
+        for (int j = 0; j < size; j++)
+        {
+            for (int i = (size - 1); i > j; i--)
+            {
+                // int pr_s = strlen(mass[i - 1], word_size);
+                // int ns_s = strlen(mass[i], word_size);
+
+                if (check_alphabet(mass[i], mass[i-1], word_size,1))
+                {
+                    int f1 = i;
+                    int f2 = i - 1;
+                    char temp[WORDSL_Y] = {0};
+                    //copying f2
+                    for (int i = 0; i < WORDSL_Y; i++)
+                    {
+                        temp[i] = mass[f2][i];
+                    }
+
+                    //rewrite f2 form f1
+                    for (int i = 0; i < WORDSL_Y; i++)
+                    {
+                        mass[f2][i] = mass[f1][i];
+                    }
+
+                    //rewrite f1 from temp
+                    for (int i = 0; i < WORDSL_Y; i++)
+                    {
+                        mass[f1][i] = temp[i];
+                    }
+
+                    // mass_exchange(mass, i, i-1);
+                    // char temp[WORDSL_Y] = mass[i - 1];
+                    // mass[i - 1] = mass[i];
+                    // mass[i] = temp;
+                }
+            }
+        }
+}
+
 int strlen(char *str, int dlinna)
 {
     // print_array(str, dlinna);
@@ -162,7 +248,29 @@ int is_char(int ch)
         return 0;
 }
 
-int check_alphabet(){
+int check_alphabet(char *w1, char *w2, int size, int reverse)
+{
+    //From m1 higher m2
+    if (reverse == 0)
+    {
+        for (int i = 0; i < size; i++)
+        {
+            if (w1[i]<w2[i])
+                return 1;
+
+        }
+        return 0;
+    }
+    else
+    {
+        for (int i = 0; i < size; i++)
+        {
+            if (w1[i]>w2[i])
+                return 1;
+        }
+        return 0;
+    }
+
     // TODO: сортировка по алфавиту
 }
 
@@ -205,7 +313,8 @@ int main(int argc, char const *argv[])
         }
     }
 
-    sort_str(wordsl, WORDSL_X, WORDSL_Y, 0);
+    // sort_str(wordsl, WORDSL_X, WORDSL_Y, 0);
+    sort_str_alph(wordsl, WORDSL_X, WORDSL_Y, 0);
 
     for (int i = 0; i < WORDSL_X; i++)
     {
