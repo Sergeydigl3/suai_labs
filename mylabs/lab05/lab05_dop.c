@@ -270,8 +270,6 @@ int check_alphabet(char *w1, char *w2, int size, int reverse)
         }
         return 0;
     }
-
-    // TODO: сортировка по алфавиту
 }
 
 int main(int argc, char const *argv[])
