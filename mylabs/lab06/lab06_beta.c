@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
 
 	char *s1 = (char *)malloc(f1size * sizeof(char));
 	char *s2 = (char *)malloc(f2size * sizeof(char));
-	// char word[15] = {0};
+
 	for (size_t i = 0; i < f1size; i++)
 	{
 		s1[i]=fgetc(f1);
@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
 	init(&l1);
 	readstr(s1, f1size, &l1);
 	destroy(&l1);
-	
+
 	free(s1);
 	free(s2);
 	fclose(f1);

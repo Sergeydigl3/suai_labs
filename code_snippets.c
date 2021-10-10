@@ -1,8 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// struct node_t;
-typedef struct
+int is_char(int ch)
+{
+	if (
+		(65 <= ch && ch <= 90) || (97 <= ch && ch <= 122) ||
+		(128 <= ch && ch <= 175) || (224 <= ch && ch <= 239))
+		return 1;
+	else
+		return 0;
+}
+typedef struct word_s
 {
 	char *arr;
 	int size;
@@ -16,7 +24,7 @@ typedef struct node_t
 	struct node_t *next;
 } node_t;
 
-typedef struct
+typedef struct list_t
 {
 	node_t *head;
 	size_t size;
@@ -79,7 +87,6 @@ void readstr(char *tmp, size_t size, list_t *list)
 	char *s = (char *)malloc(sizeof(char)); // динамическая пустая строка
 	for (size_t i = 0; i < size; i++)
 	{
-		// printf("%c",tmp[i]);
 		if (is_char(tmp[i]) == 1)
 		{
 			s[(len)++] = tmp[i];
@@ -96,29 +103,14 @@ void readstr(char *tmp, size_t size, list_t *list)
 			last_char:
 			if (len != 0)
 			{
-				printf("%d\n", len);
 				s[len] = '\0';
 				
 				push_back(list, s, len, capacity);
-				printf("----1---\n\n");
 				len = 0;
 				capacity = 1;						// емкость динамической строки
-				// char *s = NULL;
 				s = (char *)malloc(sizeof(char)); // динамическая пустая строка
-				// s[0]='d';
-				// printf("%s",s);
 				
 			}
 		}
 	}
-}
-
-int is_char(int ch)
-{
-	if (
-		(65 <= ch && ch <= 90) || (97 <= ch && ch <= 122) ||
-		(128 <= ch && ch <= 175) || (224 <= ch && ch <= 239))
-		return 1;
-	else
-		return 0;
 }
