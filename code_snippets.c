@@ -31,7 +31,7 @@ void init(list_t *l)
 void destroy(list_t *l)
 {
 	node_t *cur = l->head;
-	word_s *word;
+	word_s *word = NULL;
 	node_t *prev = NULL;
 	while (cur != NULL)
 	{
@@ -39,6 +39,7 @@ void destroy(list_t *l)
 		cur = cur->next;
 		word = prev->word;
 		free(word->arr);
+		free(word);
 		free(prev);
 	}
 }
@@ -95,15 +96,17 @@ void readstr(char *tmp, size_t size, list_t *list)
 			last_char:
 			if (len != 0)
 			{
+				printf("%d\n", len);
 				s[len] = '\0';
 				
 				push_back(list, s, len, capacity);
-				printf("12\n");
-				int len = 0;
-				int capacity = 1;						// емкость динамической строки
+				printf("----1---\n\n");
+				len = 0;
+				capacity = 1;						// емкость динамической строки
 				// char *s = NULL;
-				char *s = (char *)malloc(sizeof(char)); // динамическая пустая строка
-				printf("%s",s);
+				s = (char *)malloc(sizeof(char)); // динамическая пустая строка
+				// s[0]='d';
+				// printf("%s",s);
 				
 			}
 		}

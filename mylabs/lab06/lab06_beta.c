@@ -42,6 +42,7 @@ int main(int argc, char *argv[])
 	init(&l1);
 	readstr(s1, f1size, &l1);
 	destroy(&l1);
+	
 	free(s1);
 	free(s2);
 	fclose(f1);
