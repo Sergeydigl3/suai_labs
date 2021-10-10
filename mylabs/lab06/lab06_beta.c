@@ -30,22 +30,18 @@ int main(int argc, char *argv[])
 	char *s1 = (char *)malloc(f1size * sizeof(char));
 	char *s2 = (char *)malloc(f2size * sizeof(char));
 	// char word[15] = {0};
+	for (size_t i = 0; i < f1size; i++)
+	{
+		s1[i]=fgetc(f);
+	}
+	
 
-	// cin = 0;
-	// char **m = (char **)malloc(cin * sizeof(char *));
-	// while (fscanf(f1, "%s", word) == 1)
-	// {
-	// 	m = (*char)realloc();
-	// 	printf("%s\n", word);
-	// 	// m [ i ] = ( int *) malloc ( N * sizeof (int ));
-	// }
 	printf("%d\n", f1size);
 	printf("%d\n", f2size);
-	// for (size_t i = 0; i < f1size; i++)
-	// {
-	// 	/* code */
-	// }
-
+	list_t l1;
+	init(&l1);
+	readstr(s1, f1size, &l1);
+	destroy(&l1);
 	free(s1);
 	free(s2);
 	fclose(f1);
