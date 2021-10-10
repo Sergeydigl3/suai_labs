@@ -78,39 +78,36 @@ void readstr(char *tmp, size_t size, list_t *list)
 	char *s = (char *)malloc(sizeof(char)); // динамическая пустая строка
 	for (size_t i = 0; i < size; i++)
 	{
+		// printf("%c",tmp[i]);
 		if (is_char(tmp[i]) == 1)
 		{
-			s[(len)++] = tmp[len];
+			s[(len)++] = tmp[i];
 			if (len >= capacity)
 			{													 // если реальный размер больше размера контейнера, то увеличим его размер
 				capacity *= 2;									 // увеличиваем емкость в два раза
 				s = (char *)realloc(s, capacity * sizeof(char)); // создаём новую строку с увеличенной емкостью
 			}
-			if (i+1!=size)
+			if (i + 1 == size)
 				goto last_char;
-
 		}
 		else
 		{
 			last_char:
-			s[len] = '\0';
-			push_back(list, &s, len, capacity);
-			int len = 0;
-			int capacity = 1;						// емкость динамической строки
-			char *s = (char *)malloc(sizeof(char)); // динамическая пустая строка
+			if (len != 0)
+			{
+				s[len] = '\0';
+				
+				push_back(list, s, len, capacity);
+				printf("12\n");
+				int len = 0;
+				int capacity = 1;						// емкость динамической строки
+				// char *s = NULL;
+				char *s = (char *)malloc(sizeof(char)); // динамическая пустая строка
+				printf("%s",s);
+				
+			}
 		}
 	}
-
-	// int counter = 0;
-	// char *c = &c;
-	// while (c[counter] != '\n')
-	// {
-	// 	s[(len)++] = c;
-
-	// 	c = tmp[(counter)++];
-	// }
-	// s[len] = '\0';
-	// return s; // возвращаем указатель
 }
 
 int is_char(int ch)

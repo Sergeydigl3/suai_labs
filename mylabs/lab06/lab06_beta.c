@@ -32,12 +32,12 @@ int main(int argc, char *argv[])
 	// char word[15] = {0};
 	for (size_t i = 0; i < f1size; i++)
 	{
-		s1[i]=fgetc(f);
+		s1[i]=fgetc(f1);
 	}
 	
 
-	printf("%d\n", f1size);
-	printf("%d\n", f2size);
+	// printf("%d\n", f1size);
+	// printf("%d\n", f2size);
 	list_t l1;
 	init(&l1);
 	readstr(s1, f1size, &l1);
