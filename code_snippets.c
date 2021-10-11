@@ -158,3 +158,15 @@ void print_list(list_t *l)
 	}
 	
 }
+
+void swap_lis(struct node_t *n1, struct node_t *n2){
+	struct word_s *temp = n2->word;
+	n2->word = n1->word;
+	n1->word = temp;
+}
+
+// void swap_words(word_s *n1, word_s *n2){
+// 	struct word_s *temp = n2->word;
+// 	n2->word = n1->word;
+// 	n1->word = temp;
+// }

@@ -43,7 +43,13 @@ int main(int argc, char *argv[])
 
 	merge_list_t(&l1, &lmerge);
 	merge_list_t(&l2, &lmerge);
+	// swap_lis(&(lmerge).head, &(lmerge).head->next);
 
+	// swap_lis(&l1->head, &l2->head);
+
+	// list_t *n1 = lmerge->
+
+	swap_lis(&(lmerge->head), &(lmerge->head->&next));
 	print_list(&lmerge);
 
 	destroy(&l1);destroy(&l2);destroy(&lmerge);
