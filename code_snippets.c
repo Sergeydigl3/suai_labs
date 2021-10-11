@@ -100,17 +100,61 @@ void readstr(char *tmp, size_t size, list_t *list)
 		}
 		else
 		{
-			last_char:
+		last_char:
 			if (len != 0)
 			{
 				s[len] = '\0';
-				
+
 				push_back(list, s, len, capacity);
 				len = 0;
-				capacity = 1;						// емкость динамической строки
+				capacity = 1;					  // емкость динамической строки
 				s = (char *)malloc(sizeof(char)); // динамическая пустая строка
-				
 			}
 		}
 	}
+}
+
+void merge_list_t(list_t *l, list_t *l_merge)
+{
+	int size = l->size;
+	node_t *cur = l->head;
+	for (size_t i = 0; i < size; i++)
+	{
+		word_s *tmp_str_word = cur->word;
+		char *temp_word_arr = (char *)malloc(tmp_str_word->size * sizeof(char));
+		for (size_t i = 0; i <= tmp_str_word->size; i++)
+		{
+			temp_word_arr[i] = tmp_str_word->arr[i];
+		}
+		push_back(l_merge, temp_word_arr, tmp_str_word->size, tmp_str_word->capacity);
+		cur = cur -> next;
+	}
+}
+
+struct word_s *get(list_t *l, int i)
+{
+	node_t *cur = l -> head;
+	struct word_s *result = cur->word;
+	int count = 0;
+	// if (i < 0 || i >= l -> size)
+	// 	return -1;
+	while (count != i)
+	{
+		cur = cur -> next;
+		result = cur->word;
+		count++;
+	}
+	return result;
+}
+
+void print_list(list_t *l)
+{
+	for (size_t i = 0; i < l->size; i++)
+	{
+		printf("------------------------\n");
+		word_s *temp = get(l, i);
+		printf("%d || %s\n", i, temp->arr);
+		printf("------------------------\n\n");
+	}
+	
 }

@@ -31,17 +31,22 @@ int main(int argc, char *argv[])
 	char *s2 = (char *)malloc(f2size * sizeof(char));
 
 	for (size_t i = 0; i < f1size; i++)
-	{
 		s1[i]=fgetc(f1);
-	}
+	for (size_t i = 0; i < f2size; i++)
+		s2[i]=fgetc(f2);
 	
-
-	// printf("%d\n", f1size);
-	// printf("%d\n", f2size);
-	list_t l1;
-	init(&l1);
+	list_t l1, l2, lmerge;
+	init(&l1);init(&l2);init(&lmerge);
+	
 	readstr(s1, f1size, &l1);
-	destroy(&l1);
+	readstr(s2, f2size, &l2);
+
+	merge_list_t(&l1, &lmerge);
+	merge_list_t(&l2, &lmerge);
+
+	print_list(&lmerge);
+
+	destroy(&l1);destroy(&l2);destroy(&lmerge);
 
 	free(s1);
 	free(s2);
