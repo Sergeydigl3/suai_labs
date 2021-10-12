@@ -166,7 +166,7 @@ void print_list(list_t *l)
 // }
 
 void swap_lis(node_t *n1, node_t *n2){
-	struct node_t *temp = n2->word;
+	struct word_s *temp = n2->word;
 	n2->word = n1->word;
 	n1->word = temp;
 }
@@ -177,6 +177,20 @@ void swap_lis(node_t *n1, node_t *n2){
 // 	n1->word = temp;
 // }
 
-void sort_list_alph(list_t *l, int reverse){
+int strcmp(const char *s1, const char *s2) {
+	unsigned char c1, c2;
+	while ((c1 = *s1++) == (c2 = *s2++))
+	{
+		if (c1 == '/0') {
+			return 0;
+		}
+	}
+	return c1 - c2;
 	
 }
+
+void sort_list_alph(list_t *l, int reverse) {
+	node_t *crr = l->head;
+	for (int i = 0; )
+}
+
