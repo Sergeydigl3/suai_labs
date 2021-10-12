@@ -1,6 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// STRINGS
+char lower(int c)
+{
+	return c > 64 && c < 91 ? c + 32 : c;
+}
 int is_char(int ch)
 {
 	if (
@@ -10,20 +15,36 @@ int is_char(int ch)
 	else
 		return 0;
 }
+int is_glasn(int ch)
+{
+	ch = lower(ch);
+	if (
+		ch == 'a' ||
+		ch == 'e' ||
+		ch == 'u' ||
+		ch == 'i' ||
+		ch == 'o' ||
+		ch == 'y')
+		return 1;
+	else
+		return 0;
+}
+
+// STRUCTS
 typedef struct word_s
 {
 	char *arr;
 	int size;
+	int glasn;
+	int sogl;
 	int capacity;
 } word_s;
-
 typedef struct node_t
 {
 	struct word_s *word;
 	struct node_t *prev;
 	struct node_t *next;
 } node_t;
-
 typedef struct list_t
 {
 	node_t *head;
@@ -52,16 +73,41 @@ void destroy(list_t *l)
 	}
 }
 
-void push_back(list_t *l, char *ws, size_t sizews, int capws)
+void check_word_info(word_s *word)
 {
-	node_t *n, *cur;
-	word_s *w_t;
-	n = (node_t *)malloc(sizeof(node_t));
-	w_t = (word_s *)malloc(sizeof(word_s));
+	int sogl = 0, glasn = 0;
+	for (size_t i = 0; i < word->size; i++)
+	{
+		if (is_char(word->arr[i]))
+			if (is_glasn)
+				glasn++;
+			else
+				sogl++;
+	}
+	word->sogl=sogl;
+	word->glasn=glasn;
+}
+struct word_s *gen_word(char *ws, size_t sizews, int capws)
+{
+	word_s *w_t = (word_s *)malloc(sizeof(word_s));
 
 	w_t->arr = ws;
 	w_t->size = sizews;
 	w_t->capacity = capws;
+	return w_t;
+}
+
+void push_front(list_t *l, char *ws, size_t sizews, int capws)
+{
+}
+
+void push_back(list_t *l, char *ws, size_t sizews, int capws)
+{
+	node_t *n, *cur;
+
+	word_s *w_t = gen_word(ws, sizews, capws);
+	n = (node_t *)malloc(sizeof(node_t));
+
 	n->word = w_t;
 	n->next = NULL;
 	if (l->head == NULL)
@@ -127,20 +173,20 @@ void merge_list_t(list_t *l, list_t *l_merge)
 			temp_word_arr[i] = tmp_str_word->arr[i];
 		}
 		push_back(l_merge, temp_word_arr, tmp_str_word->size, tmp_str_word->capacity);
-		cur = cur -> next;
+		cur = cur->next;
 	}
 }
 
 struct word_s *get(list_t *l, int i)
 {
-	node_t *cur = l -> head;
+	node_t *cur = l->head;
 	struct word_s *result = cur->word;
 	int count = 0;
 	// if (i < 0 || i >= l -> size)
 	// 	return -1;
 	while (count != i)
 	{
-		cur = cur -> next;
+		cur = cur->next;
 		result = cur->word;
 		count++;
 	}
@@ -156,41 +202,98 @@ void print_list(list_t *l)
 		printf("%d || %s\n", i, temp->arr);
 		printf("------------------------\n\n");
 	}
-	
 }
 
-// void swap_lis(struct node_t **n1, struct node_t **n2){
-// 	struct word_s *temp = *(n2->word);
-// 	*(n2->word) = *(n1->word);
-// 	*(n1->word) = temp;
-// }
-
-void swap_lis(node_t *n1, node_t *n2){
+void swap_lis(node_t *n1, node_t *n2)
+{
 	struct word_s *temp = n2->word;
 	n2->word = n1->word;
 	n1->word = temp;
 }
 
-// void swap_words(word_s *n1, word_s *n2){
-// 	struct word_s *temp = n2->word;
-// 	n2->word = n1->word;
-// 	n1->word = temp;
-// }
-
-int strcmp(const char *s1, const char *s2) {
-	unsigned char c1, c2;
-	while ((c1 = *s1++) == (c2 = *s2++))
+struct node_t *get_node(list_t *l, int i)
+{
+	int count = 0;
+	node_t *curr = l->head;
+	while (count++ != i)
 	{
-		if (c1 == '/0') {
+		curr = curr->next;
+	}
+	return curr;
+};
+
+// 1 - w1 < w2  ||  A<B
+int check_alphabet(char *w1, char *w2, size_t size)
+{
+	char c1, c2;
+	printf("  (%s %s) ", w1, w2);
+	for (int i = 0; i < size; i++)
+	{
+		if (w1[i] > w2[i])
+		{
 			return 0;
 		}
+		else if (w1[i] < w2[i])
+		{
+			return 1;
+		}
+		else
+			continue;
 	}
-	return c1 - c2;
-	
+	return 1;
+
+	// 	  char c1, c2;
+	// 	  while ((c1 = *w1++) == (c2 = *w2++))
+	// 	    if (c1 == '\0')
+	// 	      return 0;
+	// 	  return 1;
 }
 
-void sort_list_alph(list_t *l, int reverse) {
-	node_t *crr = l->head;
-	for (int i = 0; )
+void sort_list_alph(list_t *l, int reverse)
+{
+	struct node_t *curr = l->head;
+	for (size_t j = 0; j < l->size; j++)
+	{
+		for (size_t i = (l->size - 1); i > j; i--)
+		{
+			struct node_t *node1 = get_node(l, i);
+			struct node_t *node2 = get_node(l, i - 1);
+			int min_node = node1->word->size < node2->word->size ? node1->word->size : node2->word->size;
+			// int need_to_sort = check_alphabet(&(node1)->word->arr, &(node2)->word->arr, min_node, 0);
+			int need_to_sort = check_alphabet(node1->word->arr, node2->word->arr, min_node);
+			// printf("%s %s - %d\n", node1->word->arr, node2->word->arr, need_to_sort);
+
+			// printf("%s %s - %d %d - %d - %d\n------------------\n\n",
+			// 	   node1->word->arr, node2->word->arr,
+			// 	   node1->word->size, node2->word->size, min_node,
+			// 	   need_to_sort);
+
+			need_to_sort = reverse == 0 ? !need_to_sort : need_to_sort;
+			if (need_to_sort)
+			{
+				// if (strcmp((&node1->word->arr), (&node2->word->arr)) > 0) {
+				swap_lis(node1, node2);
+			}
+		}
+	}
 }
 
+void sort_list_size(list_t *l, int reverse)
+{
+	struct node_t *curr = l->head;
+	for (size_t j = 0; j < l->size; j++)
+	{ // TODO: спросить Янковского за size_t
+		for (size_t i = (l->size - 1); i > j; i--)
+		{
+			struct node_t *node1 = get_node(l, i);
+			struct node_t *node2 = get_node(l, i - 1);
+			int need_to_sort = node1->word->size < node2->word->size ? 0 : 1;
+
+			need_to_sort = reverse == 0 ? !need_to_sort : need_to_sort;
+			if (need_to_sort)
+			{
+				swap_lis(node1, node2);
+			}
+		}
+	}
+}
