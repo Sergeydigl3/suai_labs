@@ -21,9 +21,11 @@ int main(int argc, char *argv[])
 	sort_list_size(&lmerge, 0);
 	print_list(&lmerge);
 
-
 	destroy(&l1);destroy(&l2);destroy(&lmerge);
-	free(s1);free(s2);
+	free(s1->arr);
+	free(s1);
+	free(s2->arr);
+	free(s2);
 
 	return 0;
 }
