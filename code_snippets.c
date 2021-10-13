@@ -1,6 +1,41 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+//File
+typedef struct file_s
+{
+	char *arr;
+	int size;
+} file_s;
+size_t file_size(FILE *f)
+{
+	// https://stackoverflow.com/questions/238603/how-can-i-get-a-files-size-in-c
+	fseek(f, 0, SEEK_END);	 // seek to end of file
+	size_t fsize = ftell(f); // get current file pointer
+	fseek(f, 0, SEEK_SET);	 // seek back to beginning of file
+	return fsize;
+}
+file_s *read_file(char * filename)
+{
+	FILE *f = fopen(filename, "r");
+	if (f == NULL)
+	{
+		printf("Error! opening files");
+		exit(1);
+	}
+
+	size_t fsize = file_size(f);
+	char *s = (char *)malloc(fsize * sizeof(char));
+	for (size_t i = 0; i < fsize; i++)
+		s[i] = fgetc(f);
+	
+	file_s *tstur = (file_s *)malloc(sizeof(file_s));;
+	tstur->arr = s;
+	tstur->size = fsize;
+	fclose(f);
+	return tstur;
+}
+
 // STRINGS
 char lower(int c)
 {
@@ -28,6 +63,16 @@ int is_glasn(int ch)
 		return 1;
 	else
 		return 0;
+}
+int cstrlenc(char *str, int dlinna)
+{
+	// print_array(str, dlinna);
+	for (int i = 0; i < dlinna; i++)
+	{
+		if (str[i] == '\0' || str[i] == '\n')
+			return i;
+	}
+	return dlinna;
 }
 
 // STRUCTS
@@ -78,8 +123,8 @@ void check_word_info(word_s *word)
 	int sogl = 0, glasn = 0;
 	for (size_t i = 0; i < word->size; i++)
 	{
-		if (is_char(word->arr[i]))
-			if (is_glasn)
+		if (is_char(word->arr[i])==1)
+			if (is_glasn(is_char(word->arr[i]))==1)
 				glasn++;
 			else
 				sogl++;
@@ -94,7 +139,7 @@ struct word_s *gen_word(char *ws, size_t sizews, int capws)
 	w_t->arr = ws;
 	w_t->size = sizews;
 	w_t->capacity = capws;
-	check_word_info(&w_t);
+	check_word_info(w_t);
 	return w_t;
 }
 
@@ -148,28 +193,28 @@ void insert(list_t *l, node_t *cur, char *ws, size_t sizews, int capws)
 
 void erase(list_t *l, node_t *cur)
 {
-	if (cur == l -> head)
+	if (cur == l->head)
 	{
-		l -> head = cur -> next;
-		if (cur -> next != NULL)
-			cur -> next -> prev = NULL;
+		l->head = cur->next;
+		if (cur->next != NULL)
+			cur->next->prev = NULL;
 		free(cur->word->arr);
 		free(cur->word);
 		free(cur);
 	}
 	else
 	{
-		cur -> prev -> next = cur - > next;
-		if (cur -> next != NULL)
-			cur -> next -> prev = cur -> prev;
+		cur->prev->next = cur->next;
+		if (cur->next != NULL)
+			cur->next->prev = cur->prev;
 		free(cur->word->arr);
-		free(cur->word);	
+		free(cur->word);
 		free(cur);
 	}
 	l->size--;
 }
 
-struct word_s *get(list_t *l, int i)
+word_s *get(list_t *l, int i)
 {
 	node_t *cur = l->head;
 	struct word_s *result = cur->word;
@@ -185,6 +230,17 @@ struct word_s *get(list_t *l, int i)
 	return result;
 }
 
+struct node_t *get_node(list_t *l, int i)
+{
+	int count = 0;
+	node_t *curr = l->head;
+	while (count++ != i)
+	{
+		curr = curr->next;
+	}
+	return curr;
+};
+
 void set(list_t *l, int index, char *ws, size_t sizews, int capws)
 {
 	node_t *temp = get_node(l, index);
@@ -192,7 +248,7 @@ void set(list_t *l, int index, char *ws, size_t sizews, int capws)
 	w_t->arr = ws;
 	w_t->size = sizews;
 	w_t->capacity = capws;
-	check_word_info(&w_t);
+	check_word_info(w_t);
 }
 
 void readstr(char *tmp, size_t size, list_t *list)
@@ -252,7 +308,7 @@ void print_list(list_t *l)
 	{
 		printf("------------------------\n");
 		word_s *temp = get(l, i);
-		printf("%d || %s\n", i, temp->arr);
+		printf("%lu || %s\n", i, temp->arr);
 		printf("------------------------\n\n");
 	}
 }
@@ -264,21 +320,10 @@ void swap_word(node_t *n1, node_t *n2)
 	n1->word = temp;
 }
 
-struct node_t *get_node(list_t *l, int i)
-{
-	int count = 0;
-	node_t *curr = l->head;
-	while (count++ != i)
-	{
-		curr = curr->next;
-	}
-	return curr;
-};
 
 // 1 - w1 < w2  ||  A<B
 int check_alphabet(char *w1, char *w2, size_t size)
 {
-	char c1, c2;
 	printf("  (%s %s) ", w1, w2);
 	for (int i = 0; i < size; i++)
 	{
@@ -294,17 +339,10 @@ int check_alphabet(char *w1, char *w2, size_t size)
 			continue;
 	}
 	return 1;
-
-	// 	  char c1, c2;
-	// 	  while ((c1 = *w1++) == (c2 = *w2++))
-	// 	    if (c1 == '\0')
-	// 	      return 0;
-	// 	  return 1;
 }
 
 void sort_list_alph(list_t *l, int reverse)
 {
-	struct node_t *curr = l->head;
 	for (size_t j = 0; j < l->size; j++)
 	{
 		for (size_t i = (l->size - 1); i > j; i--)
@@ -325,7 +363,6 @@ void sort_list_alph(list_t *l, int reverse)
 
 void sort_list_size(list_t *l, int reverse)
 {
-	struct node_t *curr = l->head;
 	for (size_t j = 0; j < l->size; j++)
 	{ // TODO: спросить Янковского за size_t
 		for (size_t i = (l->size - 1); i > j; i--)
@@ -345,7 +382,6 @@ void sort_list_size(list_t *l, int reverse)
 
 void sort_list_count_glasn(list_t *l, int reverse)
 {
-	struct node_t *curr = l->head;
 	for (size_t j = 0; j < l->size; j++)
 	{
 		for (size_t i = (l->size - 1); i > j; i--)
@@ -365,7 +401,6 @@ void sort_list_count_glasn(list_t *l, int reverse)
 
 void sort_list_count_sogl(list_t *l, int reverse)
 {
-	struct node_t *curr = l->head;
 	for (size_t j = 0; j < l->size; j++)
 	{
 		for (size_t i = (l->size - 1); i > j; i--)
