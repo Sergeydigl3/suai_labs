@@ -342,3 +342,43 @@ void sort_list_size(list_t *l, int reverse)
 		}
 	}
 }
+
+void sort_list_count_glasn(list_t *l, int reverse)
+{
+	struct node_t *curr = l->head;
+	for (size_t j = 0; j < l->size; j++)
+	{
+		for (size_t i = (l->size - 1); i > j; i--)
+		{
+			struct node_t *node1 = get_node(l, i);
+			struct node_t *node2 = get_node(l, i - 1);
+			int need_to_sort = node1->word->glasn < node2->word->glasn ? 0 : 1;
+
+			need_to_sort = reverse == 0 ? !need_to_sort : need_to_sort;
+			if (need_to_sort)
+			{
+				swap_word(node1, node2);
+			}
+		}
+	}
+}
+
+void sort_list_count_sogl(list_t *l, int reverse)
+{
+	struct node_t *curr = l->head;
+	for (size_t j = 0; j < l->size; j++)
+	{
+		for (size_t i = (l->size - 1); i > j; i--)
+		{
+			struct node_t *node1 = get_node(l, i);
+			struct node_t *node2 = get_node(l, i - 1);
+			int need_to_sort = node1->word->sogl < node2->word->sogl ? 0 : 1;
+
+			need_to_sort = reverse == 0 ? !need_to_sort : need_to_sort;
+			if (need_to_sort)
+			{
+				swap_word(node1, node2);
+			}
+		}
+	}
+}
