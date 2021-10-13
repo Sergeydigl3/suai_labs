@@ -84,8 +84,8 @@ void check_word_info(word_s *word)
 			else
 				sogl++;
 	}
-	word->sogl=sogl;
-	word->glasn=glasn;
+	word->sogl = sogl;
+	word->glasn = glasn;
 }
 struct word_s *gen_word(char *ws, size_t sizews, int capws)
 {
@@ -94,11 +94,19 @@ struct word_s *gen_word(char *ws, size_t sizews, int capws)
 	w_t->arr = ws;
 	w_t->size = sizews;
 	w_t->capacity = capws;
+	check_word_info(&w_t);
 	return w_t;
 }
 
 void push_front(list_t *l, char *ws, size_t sizews, int capws)
 {
+	node_t *n = (node_t *)malloc(sizeof(node_t));
+	word_s *w_t = gen_word(ws, sizews, capws);
+	n->word = w_t;
+	n->next = l->head;
+	l->head->prev = n;
+	l->head = n;
+	l->size++;
 }
 
 void push_back(list_t *l, char *ws, size_t sizews, int capws)
@@ -124,6 +132,67 @@ void push_back(list_t *l, char *ws, size_t sizews, int capws)
 		n->prev = cur;
 	}
 	l->size++;
+}
+
+void insert(list_t *l, node_t *cur, char *ws, size_t sizews, int capws)
+{
+	node_t *n = (node_t *)malloc(sizeof(node_t));
+	word_s *w_t = gen_word(ws, sizews, capws);
+	n->word = w_t;
+	n->next = cur->next;
+	n->prev = cur;
+	cur->next->prev = n;
+	cur->next = n;
+	l->size++;
+}
+
+void erase(list_t *l, node_t *cur)
+{
+	if (cur == l -> head)
+	{
+		l -> head = cur -> next;
+		if (cur -> next != NULL)
+			cur -> next -> prev = NULL;
+		free(cur->word->arr);
+		free(cur->word);
+		free(cur);
+	}
+	else
+	{
+		cur -> prev -> next = cur - > next;
+		if (cur -> next != NULL)
+			cur -> next -> prev = cur -> prev;
+		free(cur->word->arr);
+		free(cur->word);	
+		free(cur);
+	}
+	l->size--;
+}
+
+struct word_s *get(list_t *l, int i)
+{
+	node_t *cur = l->head;
+	struct word_s *result = cur->word;
+	int count = 0;
+	// if (i < 0 || i >= l -> size)
+	// 	return -1;
+	while (count != i)
+	{
+		cur = cur->next;
+		result = cur->word;
+		count++;
+	}
+	return result;
+}
+
+void set(list_t *l, int index, char *ws, size_t sizews, int capws)
+{
+	node_t *temp = get_node(l, index);
+	word_s *w_t = temp->word;
+	w_t->arr = ws;
+	w_t->size = sizews;
+	w_t->capacity = capws;
+	check_word_info(&w_t);
 }
 
 void readstr(char *tmp, size_t size, list_t *list)
@@ -177,22 +246,6 @@ void merge_list_t(list_t *l, list_t *l_merge)
 	}
 }
 
-struct word_s *get(list_t *l, int i)
-{
-	node_t *cur = l->head;
-	struct word_s *result = cur->word;
-	int count = 0;
-	// if (i < 0 || i >= l -> size)
-	// 	return -1;
-	while (count != i)
-	{
-		cur = cur->next;
-		result = cur->word;
-		count++;
-	}
-	return result;
-}
-
 void print_list(list_t *l)
 {
 	for (size_t i = 0; i < l->size; i++)
@@ -204,7 +257,7 @@ void print_list(list_t *l)
 	}
 }
 
-void swap_lis(node_t *n1, node_t *n2)
+void swap_word(node_t *n1, node_t *n2)
 {
 	struct word_s *temp = n2->word;
 	n2->word = n1->word;
@@ -259,20 +312,12 @@ void sort_list_alph(list_t *l, int reverse)
 			struct node_t *node1 = get_node(l, i);
 			struct node_t *node2 = get_node(l, i - 1);
 			int min_node = node1->word->size < node2->word->size ? node1->word->size : node2->word->size;
-			// int need_to_sort = check_alphabet(&(node1)->word->arr, &(node2)->word->arr, min_node, 0);
 			int need_to_sort = check_alphabet(node1->word->arr, node2->word->arr, min_node);
-			// printf("%s %s - %d\n", node1->word->arr, node2->word->arr, need_to_sort);
-
-			// printf("%s %s - %d %d - %d - %d\n------------------\n\n",
-			// 	   node1->word->arr, node2->word->arr,
-			// 	   node1->word->size, node2->word->size, min_node,
-			// 	   need_to_sort);
 
 			need_to_sort = reverse == 0 ? !need_to_sort : need_to_sort;
 			if (need_to_sort)
 			{
-				// if (strcmp((&node1->word->arr), (&node2->word->arr)) > 0) {
-				swap_lis(node1, node2);
+				swap_word(node1, node2);
 			}
 		}
 	}
@@ -292,7 +337,7 @@ void sort_list_size(list_t *l, int reverse)
 			need_to_sort = reverse == 0 ? !need_to_sort : need_to_sort;
 			if (need_to_sort)
 			{
-				swap_lis(node1, node2);
+				swap_word(node1, node2);
 			}
 		}
 	}
