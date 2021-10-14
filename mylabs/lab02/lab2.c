@@ -42,8 +42,7 @@ int check_example(char *str, char *obr, int size_obr, int st_pos)
 {
     for (int i = 0; i < size_obr; i++)
     {
-        if (
-            str[st_pos + i] != obr[i])
+        if (str[st_pos + i] != obr[i])
         {
             return 0;
         }

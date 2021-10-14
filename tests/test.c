@@ -3,13 +3,13 @@
 
 int main(int argc, char const *argv[])
 {
-    char str[100];
-    fgets(str, 10, stdin);
-    fflush(stdin);
-    
-    printf("%d", pow(10,3));
-    return 0;
-}
+        char str[100];
+        fgets(str, 10, stdin);
+        fflush(stdin);
+        
+        printf("%d", pow(10,3));
+        return 0;
+    }
 
 
 
