@@ -15,7 +15,7 @@ size_t file_size(FILE *f)
 	fseek(f, 0, SEEK_SET);	 // seek back to beginning of file
 	return fsize;
 }
-file_s *read_file(char * filename)
+file_s *read_file(char *filename)
 {
 	FILE *f = fopen(filename, "r");
 	if (f == NULL)
@@ -28,8 +28,9 @@ file_s *read_file(char * filename)
 	char *s = (char *)malloc(fsize * sizeof(char));
 	for (size_t i = 0; i < fsize; i++)
 		s[i] = fgetc(f);
-	
-	file_s *tstur = (file_s *)malloc(sizeof(file_s));;
+
+	file_s *tstur = (file_s *)malloc(sizeof(file_s));
+	;
 	tstur->arr = s;
 	tstur->size = fsize;
 	fclose(f);
@@ -95,6 +96,16 @@ typedef struct list_t
 	node_t *head;
 	size_t size;
 } list_t;
+struct node_t *get_node(list_t *l, int i)
+{
+	int count = 0;
+	node_t *curr = l->head;
+	while (count++ != i)
+	{
+		curr = curr->next;
+	}
+	return curr;
+};
 
 void init(list_t *l)
 {
@@ -123,8 +134,8 @@ void check_word_info(word_s *word)
 	int sogl = 0, glasn = 0;
 	for (size_t i = 0; i < word->size; i++)
 	{
-		if (is_char(word->arr[i])==1)
-			if (is_glasn(is_char(word->arr[i]))==1)
+		if (is_char(word->arr[i]) == 1)
+			if (is_glasn(is_char(word->arr[i])) == 1)
 				glasn++;
 			else
 				sogl++;
@@ -156,6 +167,7 @@ void push_front(list_t *l, char *ws, size_t sizews, int capws)
 
 void push_back(list_t *l, char *ws, size_t sizews, int capws)
 {
+
 	node_t *n, *cur;
 
 	word_s *w_t = gen_word(ws, sizews, capws);
@@ -214,6 +226,16 @@ void erase(list_t *l, node_t *cur)
 	l->size--;
 }
 
+void list_remove(list_t *l, int index)
+{
+	node_t *cur = get_node(l, index);
+	if (cur->prev != NULL)
+		cur->prev->next = cur->next;
+	if (cur->next != NULL)
+		cur->next->prev = cur->prev;
+	l->size--;
+}
+
 word_s *get(list_t *l, int i)
 {
 	node_t *cur = l->head;
@@ -229,17 +251,6 @@ word_s *get(list_t *l, int i)
 	}
 	return result;
 }
-
-struct node_t *get_node(list_t *l, int i)
-{
-	int count = 0;
-	node_t *curr = l->head;
-	while (count++ != i)
-	{
-		curr = curr->next;
-	}
-	return curr;
-};
 
 void set(list_t *l, int index, char *ws, size_t sizews, int capws)
 {
@@ -320,6 +331,37 @@ void swap_word(node_t *n1, node_t *n2)
 	n1->word = temp;
 }
 
+int compare_words(char *w1, char *w2, size_t size)
+{
+	for (size_t i = 0; i < size; i++)
+	{
+		if (w1[i] != w2[i])
+			return 0;
+	}
+	return 1;
+}
+
+int find_word(list_t *l, int offset, char *temp, size_t temp_size)
+{
+	for (size_t i = offset; i < l->size; i++)
+	{
+		word_s *getted_word = get(l, i);
+		if (getted_word->size == temp_size && compare_words(temp, getted_word->arr, temp_size))
+			return i;
+	}
+	return -1;
+}
+
+void remove_duplicates(list_t *l)
+{
+	for (size_t i = 0; i < l->size; i++)
+	{
+		node_t *curr = get_node(l, i);
+		int founded_word;
+		while ((founded_word = find_word(l, i + 1, curr->word->arr, curr->word->size)) != -1)
+			list_remove(l, founded_word);
+	}
+}
 
 // 1 - w1 < w2  ||  A<B
 int check_alphabet(char *w1, char *w2, size_t size)
