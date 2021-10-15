@@ -113,19 +113,22 @@ void init(list_t *l)
 	l->size = 0;
 }
 
+void destroy_node(node_t * node){
+	free(node->word->arr);
+	free(node->word);
+	free(node);
+}
+
+
 void destroy(list_t *l)
 {
 	node_t *cur = l->head;
-	word_s *word = NULL;
 	node_t *prev = NULL;
 	while (cur != NULL)
 	{
 		prev = cur;
 		cur = cur->next;
-		word = prev->word;
-		free(word->arr);
-		free(word);
-		free(prev);
+		destroy_node(prev);
 	}
 }
 
@@ -210,18 +213,14 @@ void erase(list_t *l, node_t *cur)
 		l->head = cur->next;
 		if (cur->next != NULL)
 			cur->next->prev = NULL;
-		free(cur->word->arr);
-		free(cur->word);
-		free(cur);
+		destroy_node(cur);
 	}
 	else
 	{
 		cur->prev->next = cur->next;
 		if (cur->next != NULL)
 			cur->next->prev = cur->prev;
-		free(cur->word->arr);
-		free(cur->word);
-		free(cur);
+		destroy_node(cur);
 	}
 	l->size--;
 }
@@ -233,6 +232,10 @@ void list_remove(list_t *l, int index)
 		cur->prev->next = cur->next;
 	if (cur->next != NULL)
 		cur->next->prev = cur->prev;
+	if (index==0) 
+		if (l->head->next!=NULL) l->head = l->head->next;
+		else l->head=NULL;
+	destroy_node(cur);
 	l->size--;
 }
 
