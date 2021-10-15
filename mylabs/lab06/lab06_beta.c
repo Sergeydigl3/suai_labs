@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
 	readstr(s1->arr, s1->size, &l1);
 	readstr(s2->arr, s2->size, &l2);
 
-	// merge_list_t(&l1, &lmerge);
+	merge_list_t(&l1, &lmerge);
 	merge_list_t(&l2, &lmerge);
 
 	// sort_list_size(&lmerge, 0);
