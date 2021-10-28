@@ -224,7 +224,7 @@ int main(int argc, char const *argv[])
         }
     }
 
-    sort_str(wordsl, WORDSL_X, WORDSL_Y, 0);
+    sort_str(wordsl, WORDSL_X, WORDSL_Y, 1);
 
     for (int i = 0; i < WORDSL_X; i++)
     {

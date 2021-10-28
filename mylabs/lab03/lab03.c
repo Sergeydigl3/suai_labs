@@ -27,12 +27,11 @@ void find_close(int mass[], int x, int size)
 
 int main(int argc, char const *argv[])
 {
-    int tmass[] = {4, 20, 34, 6};
+    int tmass[] = {4, 20, 34, 7};
     int size = 4;
     int x = 5;
 
     find_close(tmass, x, size);
-    // print_array(tmass,4);
 
     return 0;
 }
