@@ -1,12 +1,14 @@
+
 #include <iostream>
 #include <math.h>
 #include "lab08.h"
 using namespace std;
 
+// Dop: 
 int main(int argc, char *argv[])
 {
-    double a = 0.5;
-    double b = 0.8;
+    double a = 0;
+    double b = 3.14159;
     double eps = 0.00000015;
     double y, dy, In;
     // cin >> a >> b >> eps;
