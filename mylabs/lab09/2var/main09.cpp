@@ -34,11 +34,13 @@ void sumn(node *&top1, node *&top2, node *&top3, node *&end3)
     {
         if (temp1 == NULL)
         {
-            addToPoly(top3, end3, temp1->power, temp1->koef, counter_nnode);
-            counter_nnode++;
+            // printf("dd %d %d\n", temp1->power, temp1->koef);
+            // addToPoly(top3, end3, temp1->power, temp1->koef, counter_nnode);
+            // counter_nnode++;
             break;
         }
         node *temp2 = top2;
+        int found = 0;
         while (1)
         {
             if (temp2 == NULL)
@@ -49,9 +51,11 @@ void sumn(node *&top1, node *&top2, node *&top3, node *&end3)
                 int t_koef = temp1->koef + temp2->koef;
                 addToPoly(top3, end3, t_power, t_koef, counter_nnode);
                 counter_nnode++;
+                found = 1;
             }
             temp2 = temp2->next;
         }
+        if (found == 0) {addToPoly(top3, end3, temp1->power, temp1->koef, counter_nnode);counter_nnode++;}
         temp1 = temp1->next;
     }
 }
@@ -59,13 +63,18 @@ void sumn(node *&top1, node *&top2, node *&top3, node *&end3)
 void printf_poly(node *&top3)
 {
     node *poly = top3;
+    int first = 1;
     while (1)
     {
         if (poly == NULL)
             break;
-        cout << (poly->koef > 0 ? " +" : " ") << poly->koef;
+        if (first == 1) {cout << poly->koef; first=0;}
+        else cout << (poly->koef > 0 ? " +" : " ") << poly->koef;
         if (poly->power != 0)
-            cout << "(x^" << poly->power << ")";
+            if (poly->power == 1)
+                cout << "x";
+            else
+                cout << "(x^" << poly->power << ")";
         poly = poly->next;
     }
 }
@@ -74,23 +83,30 @@ int main()
 {
     node *top_polinom1, *end_polinom1;
     node *top_polinom2, *end_polinom2;
+    node *temp_poly_top, *temp_poly_end;
     node *top_polinom3, *end_polinom3;
 
-    int n;
+    int n, n1, n2;
 
     cout << "1st: enter n = ";
-    cin >> n;
+    cin >> n1;
     cout << "\n";
-    create_polinom(top_polinom1, end_polinom1, n);
+    create_polinom(top_polinom1, end_polinom1, n1);
 
     cout << "2nd: enter n = ";
-    cin >> n;
+    cin >> n2;
     cout << "\n";
-    create_polinom(top_polinom2, end_polinom2, n);
+    create_polinom(top_polinom2, end_polinom2, n2);
 
     cout << "Choose operation:\n1 - summ\n2 - rasnost'\n3 - Umnozeniye\n4 - Delenye\n";
     cin >> n;
     cout << "\n";
+
+    if (n2>n1){
+        temp_poly =
+    }
+
+
     switch (n)
     {
     case 1:
@@ -112,5 +128,6 @@ int main()
         break;
     }
 
+    printf("\n");
     return 0;
 }

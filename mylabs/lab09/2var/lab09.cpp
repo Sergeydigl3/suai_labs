@@ -22,8 +22,9 @@ void create_polinom(node *&top, node *&end, int n)
         p = new node;
         cout << " enter koef=";
         cin >> p->koef;
-        cout << " enter power=";
-        cin >> p->power;
+        // cout << " enter power=";
+        // cin >> p->power;
+        p->power = n-i-1;
         cout << "\n";
         if (i == 0)
         {
