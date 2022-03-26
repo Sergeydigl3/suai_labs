@@ -64,6 +64,7 @@ void printf_poly(node *&top3)
 {
     node *poly = top3;
     int first = 1;
+    cout << "Result: ";
     while (1)
     {
         if (poly == NULL)
@@ -103,7 +104,14 @@ int main()
     cout << "\n";
 
     if (n2>n1){
-        temp_poly =
+        temp_poly_top = top_polinom2;
+        temp_poly_end = end_polinom2;
+
+        top_polinom2 = top_polinom1;
+        end_polinom2 = end_polinom1;
+
+        top_polinom1 = temp_poly_top;
+        end_polinom1 = temp_poly_end;
     }
 
 
