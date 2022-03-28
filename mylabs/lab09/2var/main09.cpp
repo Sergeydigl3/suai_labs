@@ -25,7 +25,7 @@ void addToPoly(node *&top, node *&end, int power, int koef, int counter_nnode)
     }
 }
 
-void sumn(node *&top1, node *&top2, node *&top3, node *&end3)
+void sumn(node *&top1, node *&top2, node *&top3, node *&end3, int act)
 {
     node *temp1 = top1;
     int counter_nnode = 0;
@@ -34,9 +34,6 @@ void sumn(node *&top1, node *&top2, node *&top3, node *&end3)
     {
         if (temp1 == NULL)
         {
-            // printf("dd %d %d\n", temp1->power, temp1->koef);
-            // addToPoly(top3, end3, temp1->power, temp1->koef, counter_nnode);
-            // counter_nnode++;
             break;
         }
         node *temp2 = top2;
@@ -48,7 +45,28 @@ void sumn(node *&top1, node *&top2, node *&top3, node *&end3)
             if (temp1->power == temp2->power)
             {
                 int t_power = temp1->power;
-                int t_koef = temp1->koef + temp2->koef;
+                int t_koef;
+                switch (act)
+                {
+                case 1: // summa
+                    t_koef = temp1->koef + temp2->koef;
+                    break;
+                
+                case 2: // razn
+                    t_koef = temp1->koef - temp2->koef;
+                    break;
+                    
+                case 3: // umnoj
+                    t_koef = temp1->koef * temp2->koef;
+                    break;
+                
+                case 4: // del
+                    t_koef = temp1->koef / temp2->koef;
+
+                default:
+                    break;
+                }
+                
                 addToPoly(top3, end3, t_power, t_koef, counter_nnode);
                 counter_nnode++;
                 found = 1;
@@ -115,26 +133,7 @@ int main()
     }
 
 
-    switch (n)
-    {
-    case 1:
-        sumn(top_polinom1, top_polinom2, top_polinom3, end_polinom3);
-        printf_poly(top_polinom3);
-        break;
-    case 2:
-        /* code */
-        break;
-    case 3:
-        /* code */
-        break;
-    case 4:
-        /* code */
-        break;
-
-    default:
-        cout << "Error number!";
-        break;
-    }
+    sumn(top_polinom1, top_polinom2, top_polinom3, end_polinom3, n);   
 
     printf("\n");
     return 0;
