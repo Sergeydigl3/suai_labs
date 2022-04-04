@@ -10,6 +10,10 @@ struct node
 
 void create_polinom(node *&top, node *&end, int n);
 
-double F2(node *&top, double x);
+void printf_poly(node*& top3);
 
-double FindRoot(double (*f)(node*&, double), double a, double b, double eps, node *&top);
+
+void addToPoly(node*& top, node*& end, int power, int koef, int counter_nnode);
+
+
+void sumn(node*& top1, node*& top2, node*& top3, node*& end3, node*& top4, node*& end4, int act, int changed, int maxpower);
