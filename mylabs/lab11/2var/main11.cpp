@@ -11,24 +11,43 @@ int main() {
 
     char* pch = strtok(t_path, drvie_preffix);
     char* str;
+    int mass_counter = -1;
+    char **massive = (char **) malloc(sizeof(char*)*mass_counter);
+
     while (pch != NULL)
     {
         printf("\n%s %ld", pch, strlen(pch));
         size_t t_size = strlen(pch) + 1;
         str = (char*)malloc(sizeof(char) * t_size);
+        mass_counter++; massive = (char **) realloc(massive, sizeof(char*)*mass_counter);
+        
         for (size_t i = 0; i < t_size; i++)
             str[i] = pch[i];
-
+        massive[mass_counter] = str;
         char* t_char = pch;
 
-
         pch = strtok(NULL, drvie_preffix);
-        if(pch == NULL){
-            for (int i = t_size; i > -1; i++)
+        if (pch == NULL) {
+            char* new_ext = (char*)malloc(sizeof(char) * t_size);
+            size_t t_count = 0;
+            int flag = 0;
+
+
+            for (int i = 0; i < t_size; i++)
             {
-                if (str[i]=='.')
+                if (flag == 1) {
+                    new_ext[t_count] = t_char[i];
+                    t_count++;
+                }
+                if (str[i] == '.') flag = 1;
+                if (flag == 1) 
             }
+            massive[t_count] = 0;
             
+            printf("\n%s %ld", pch, strlen(pch));
+            printf("\n%s %ld", new_ext, strlen(new_ext));
+
+
         }
     }
     printf("\n");

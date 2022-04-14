@@ -12,6 +12,6 @@ int main(int argc, char *argv[])
         scanf("%ld", &a);
         ltoao(a, p);
         printf("%s", p);
-        printf(" %o\n", a);
+        // printf(" %o\n", a);
     }
 }
