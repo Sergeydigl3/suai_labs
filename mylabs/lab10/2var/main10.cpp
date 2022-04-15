@@ -3,7 +3,6 @@
 #include <iostream>
 #include "lab10.h"
 #include <string.h>
-#include <malloc.h>
 #include <stdlib.h>
 using namespace std;
 
@@ -11,7 +10,8 @@ using namespace std;
 int main() {
     file_s* s1 = read_file("demo.c");
 
-    char actions[][STR_SIZE] = { "==", "!=", "<=", ">=", "++", "--", "&&", "||", "<<", ">>", "!", ">", "<", "`", "&", "|", "^", "=", "*", "/", "%", "-", "+"};
+    char actions[][STR_SIZE] = { "==", "!=", "<=", ">=", "++", "--", "&&", "||",
+     "<<", ">>", "!", ">", "<", "`", "&", "|", "^", "=", "*", "/", "%", "-", "+"};
 
     size_t act_count = sizeof(actions) / STR_SIZE;
 

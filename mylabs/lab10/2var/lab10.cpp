@@ -10,7 +10,7 @@ size_t file_size(FILE *f)
 	fseek(f, 0, SEEK_SET);	 // seek back to beginning of file
 	return fsize;
 }
-file_s *read_file(const char *filename)
+[[nodiscard]] file_s *read_file(const char *filename)
 {
 	FILE *f = fopen(filename, "r");
 	if (f == NULL)
@@ -25,7 +25,7 @@ file_s *read_file(const char *filename)
 		s[i] = fgetc(f);
 
 	file_s *tstur = (file_s *)malloc(sizeof(file_s));
-	;
+	
 	tstur->arr = s;
 	tstur->size = fsize;
 	fclose(f);
