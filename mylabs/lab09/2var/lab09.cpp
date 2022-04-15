@@ -114,7 +114,7 @@ void sumn(node*& top1, node*& top2, node*& top3, node*& end3, node*& top4, node*
             temp1 = temp1->next;
         }
 
-        printf_poly(top4);
+        // printf_poly(top4);
         printf("\n");
         counter_nnode = 0;
         for (int i = maxpower; i > -1; i--)
