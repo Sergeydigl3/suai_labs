@@ -13,7 +13,7 @@ int main() {
     char* str;
     int mass_counter = -1;
     char **massive = (char **) malloc(sizeof(char*)*mass_counter);
-
+    
     while (pch != NULL)
     {
         printf("\n%s %ld", pch, strlen(pch));
@@ -40,11 +40,11 @@ int main() {
                     t_count++;
                 }
                 if (str[i] == '.') flag = 1;
-                if (flag == 1) 
+                if (flag == 1) t_char[i] = 0; 
             }
-            massive[t_count] = 0;
+            new_ext[t_count] = 0;
             
-            printf("\n%s %ld", pch, strlen(pch));
+            // printf("\n%s %ld", pch, strlen(pch));
             printf("\n%s %ld", new_ext, strlen(new_ext));
 
 
