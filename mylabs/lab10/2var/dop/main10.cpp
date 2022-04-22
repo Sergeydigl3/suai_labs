@@ -1,4 +1,5 @@
 // Подсчитать частоту использования каждой операции языка С в символьном файле с программой на С.
+// dop: ne analyz comentarii v odnu stroku
 #include <stdio.h>
 #include <iostream>
 #include "lab10.h"
@@ -32,6 +33,10 @@ int main() {
         for (size_t j = 0; j < act_count; j++)
         {   
             if (s1->arr[i]=='#') bad_str=1;
+            else if(s1->arr[i]=='/' && s1->arr[i+1]=='/') {
+                bad_str=1;
+                i++;
+            }
             else if (s1->arr[i]=='\n') bad_str=0;
             if (bad_str) continue;
             
