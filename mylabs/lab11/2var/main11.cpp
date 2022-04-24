@@ -16,7 +16,7 @@ int main() {
     
     while (pch != NULL)
     {
-        printf("\n%s %ld", pch, strlen(pch));
+        // printf("\n%s %ld", pch, strlen(pch));
         size_t t_size = strlen(pch) + 1;
         str = (char*)malloc(sizeof(char) * t_size);
         mass_counter++; massive = (char **) realloc(massive, sizeof(char*)*mass_counter);
@@ -32,6 +32,7 @@ int main() {
             size_t t_count = 0;
             int flag = 0;
 
+            char *filename = (char *) calloc(1 * ())
 
             for (int i = 0; i < t_size; i++)
             {
@@ -51,5 +52,10 @@ int main() {
         }
     }
     printf("\n");
+    for (size_t i = 0; i < mass_counter; i++)
+    {
+        printf("%s\n", massive[i]);
+    }
+    
     // pathsplit(t_path,);
 }
