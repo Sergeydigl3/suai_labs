@@ -5,16 +5,14 @@
 using namespace std;
 
 int main() {
-    
-
-    int r1, i1, r2, i2;
-    float res_r, res_i;
+    double r1, i1, r2, i2;
 
     cout << "Enter the real part of the first complex number:";
     cin >> r1;
 
     cout << "Enter the imaginary part of the first complex number:";
     cin >> i1;
+    Complex c1 (r1 , i1);
     cout << endl;
 
     cout << "Enter the real part of the second complex number:";
@@ -22,34 +20,28 @@ int main() {
 
     cout << "Enter the imaginary part of the first complex number:";
     cin >> i2;
+    Complex c2 (r2 , i2);
     cout << endl;
-    
-    Complex numbers(r1, r2, i1, i2);
-
-    // numbers.setComplex(r1, r2, i1, i2);
 
     cout << "Initial numbers:" << endl;
-    numbers.printComplex();
+    c1.printComplex();
+    c2.printComplex();
     cout << endl;
 
     cout << "After addition:" << endl;
-    numbers.sumComplex();
-    numbers.printResComplex();
+    (c1+c2).printComplex();
     cout << endl;
 
     cout << "After subtraction:" << endl;
-    numbers.subComplex();
-    numbers.printResComplex();
+    (c1-c2).printComplex();
     cout << endl;
 
     cout << "After multiplication:" << endl;
-    numbers.multComplex();
-    numbers.printResComplex();
+    (c1*c2).printComplex();
     cout << endl;
 
     cout << "After division:" << endl;
-    numbers.divComplex();
-    numbers.printResComplex();
+    (c1/c2).printComplex();
     cout << endl;
 
     return 0;
