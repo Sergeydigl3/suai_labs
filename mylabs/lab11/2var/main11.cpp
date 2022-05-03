@@ -6,13 +6,12 @@
 #include <malloc.h>
 
 int main() {
-    char t_path[] = "C:\\codePack\\moodle-answers-script\\README.d";
+    char t_path[] = "C:\\codePack\\moodle-answers-script\\README.dasfasfas";
 
-    int mass_counter = 1;
-    char** massive = (char**)malloc(sizeof(char*) * mass_counter);
-    pathsplit(t_path, massive);
+    char** massive = NULL;
+    pathsplit(t_path, &massive);
+    printMassive(massive);
     
-    printf("\n\n%s\n", massive[0]);
     
     // pathsplit(t_path,);
 }

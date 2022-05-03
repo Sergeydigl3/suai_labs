@@ -2,12 +2,14 @@
 #include <stdio.h>
 #include <malloc.h>
 
-void pathsplit(char* t_path, char* massive[]) {
+void pathsplit(char* t_path, char** massive[]) {
     char drvie_preffix[] = ":\\";
+    
+    int mass_counter = 1;
+    *massive = (char**)malloc(sizeof(char*) * mass_counter); (*massive)[mass_counter-1] = NULL;
 
     char* pch = strtok(t_path, drvie_preffix);
     char* str;
-    int mass_counter = 1;
     
 
     while (pch != NULL)
@@ -15,16 +17,16 @@ void pathsplit(char* t_path, char* massive[]) {
         // printf("\n%s %ld", pch, strlen(pch));
         size_t t_size = strlen(pch) + 1;
         str = (char*)malloc(sizeof(char) * t_size);
-        mass_counter++; massive = (char**)realloc(massive, sizeof(char*) * mass_counter);
+        mass_counter++; *massive = (char**)realloc(*massive, sizeof(char*) * mass_counter); (*massive)[mass_counter-1] = NULL;
 
         for (size_t i = 0; i < t_size; i++)
             str[i] = pch[i];
-        massive[mass_counter - 2] = str;
+        (*massive)[mass_counter - 2] = str;
         char* t_char = pch;
 
         pch = strtok(NULL, drvie_preffix);
         if (pch == NULL) {
-
+            mass_counter++; *massive = (char**)realloc(*massive, sizeof(char*) * mass_counter); (*massive)[mass_counter-1] = NULL;
             unsigned int ext_size = 1;
             char* extintion = (char*)calloc(ext_size, sizeof(char));
 
@@ -36,31 +38,31 @@ void pathsplit(char* t_path, char* massive[]) {
             if (extintion_start == -1) extintion_start = t_size;
             char* filename = (char*)calloc(extintion_start, sizeof(char));
 
+
             for (size_t i = 0; i < extintion_start; i++)
             {
                 filename[i] = str[i];
             }
-            // mass_counter++; massive = (char **) realloc(massive, sizeof(char*)*mass_counter);
-            // massive[mass_counter-1] = filename;
             for (size_t i = extintion_start + 1; i < t_size; i++)
             {
                 extintion[i - extintion_start - 1] = str[i];
             }
-            free(massive[mass_counter - 2]);
-            massive[mass_counter - 2] = filename;
-            massive[mass_counter - 1] = extintion;
-
-            // printf("%s\n", filename);
-            // printf("%s\n", filenam);
-
-
+            
+            free((*massive)[mass_counter - 3]);
+            (*massive)[mass_counter - 3] = filename;
+            (*massive)[mass_counter - 2] = extintion;
         }
     }
 
     printf("\n");
-    for (size_t i = 0; i < mass_counter; i++)
-    {
-        printf("%s\n", massive[i]);
+
+}
+
+void printMassive(char **massive){
+    if (massive == NULL){
+        perror("in pathsplit() memory allocation error");
     }
-    printf("\n\n%s\n", massive[0]);
+    while(*massive!=NULL) {
+        printf("%s\n", *(massive++));
+    }
 }
