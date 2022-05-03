@@ -6,12 +6,9 @@
 #include <malloc.h>
 
 int main() {
-    char t_path[] = "C:\\codePack\\moodle-answers-script\\README.dasfasfas";
+    char t_path[] = "C:\\codePack\\moodle-answers-script\\.README\\test.py";
 
     char** massive = NULL;
     pathsplit(t_path, &massive);
     printMassive(massive);
-    
-    
-    // pathsplit(t_path,);
 }

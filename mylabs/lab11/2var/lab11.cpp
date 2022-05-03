@@ -14,7 +14,6 @@ void pathsplit(char* t_path, char** massive[]) {
 
     while (pch != NULL)
     {
-        // printf("\n%s %ld", pch, strlen(pch));
         size_t t_size = strlen(pch) + 1;
         str = (char*)malloc(sizeof(char) * t_size);
         mass_counter++; *massive = (char**)realloc(*massive, sizeof(char*) * mass_counter); (*massive)[mass_counter-1] = NULL;
@@ -26,8 +25,7 @@ void pathsplit(char* t_path, char** massive[]) {
 
         pch = strtok(NULL, drvie_preffix);
         if (pch == NULL) {
-            mass_counter++; *massive = (char**)realloc(*massive, sizeof(char*) * mass_counter); (*massive)[mass_counter-1] = NULL;
-            unsigned int ext_size = 1;
+            unsigned int ext_size = 1; // выделяем массив и считаем кол-во символов расширения
             char* extintion = (char*)calloc(ext_size, sizeof(char));
 
             int extintion_start = -1;
@@ -35,7 +33,10 @@ void pathsplit(char* t_path, char** massive[]) {
             {
                 if (str[i] == '.') { extintion_start = i; break; }
             }
-            if (extintion_start == -1) extintion_start = t_size;
+            if (extintion_start == -1) continue; // если это директория - выходим
+
+            mass_counter++; *massive = (char**)realloc(*massive, sizeof(char*) * mass_counter); (*massive)[mass_counter-1] = NULL; // берём слот под расширение дополнительно
+
             char* filename = (char*)calloc(extintion_start, sizeof(char));
 
 
@@ -53,9 +54,6 @@ void pathsplit(char* t_path, char** massive[]) {
             (*massive)[mass_counter - 2] = extintion;
         }
     }
-
-    printf("\n");
-
 }
 
 void printMassive(char **massive){
