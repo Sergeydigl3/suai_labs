@@ -29,6 +29,8 @@ int main() {
     cout << endl;
 
     cout << "After addition:" << endl;
+    ComplexVector d1; 
+    d1.append(c1); // FIXME
     (c1+c2).printComplex();
     cout << endl;
 
