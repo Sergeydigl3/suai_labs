@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <malloc.h>
 
+// TODO: Доп 1Есть текстовый файл с абсолютными путями. Сделать группировку по типам рассширений (Заранее указаны)
+
 void pathsplit(char* t_path, char** massive[]) {
     char drvie_preffix[] = ":\\";
     
