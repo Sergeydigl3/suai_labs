@@ -40,6 +40,8 @@ public:
     ComplexVector operator-(ComplexVector& c);
     ComplexVector operator*(ComplexVector& c);
     ComplexVector operator/(ComplexVector& c);
+    Complex operator []( size_t i ) const ;
+    Complex & operator []( size_t i );
 
 private:
     Complex sub_operation(size_t action, Complex& c1, Complex& c2);

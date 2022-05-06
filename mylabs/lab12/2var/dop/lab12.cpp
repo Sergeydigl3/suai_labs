@@ -155,3 +155,5 @@ ComplexVector ComplexVector :: operator*(ComplexVector& c) {
 ComplexVector ComplexVector :: operator/(ComplexVector& c) {
     return do_operation(3, c);
 }
+
+Complex & ComplexVector::operator []( size_t i ) { return this->array [ i ]; }
