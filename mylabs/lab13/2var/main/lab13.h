@@ -30,12 +30,8 @@ public:
     Date& operator+=(int days);
     Date& operator+=(const Date& d);
 
-    // Date& operator--();
-
     friend ostream& operator <<(ostream& os, const Date& d);
     friend istream& operator >>(istream& is, Date& d);
-
-        // ~Date();
 };
 
 
