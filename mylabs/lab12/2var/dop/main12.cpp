@@ -5,46 +5,43 @@
 using namespace std;
 
 int main() {
-    double r1, i1, r2, i2;
+    Complex c1, c2, c3;
+    c1.enter_data();
+    c2.enter_data();
+    c3.enter_data();
 
-    cout << "Enter the real part of the first complex number:";
-    cin >> r1;
-
-    cout << "Enter the imaginary part of the first complex number:";
-    cin >> i1;
-    Complex c1 (r1 , i1);
-    cout << endl;
-
-    cout << "Enter the real part of the second complex number:";
-    cin >> r2;
-
-    cout << "Enter the imaginary part of the first complex number:";
-    cin >> i2;
-    Complex c2 (r2 , i2);
-    cout << endl;
+    ComplexVector d1, d2;
+    d1.push(c1);
+    d2.push(c2);
+    d2.push(c3);
 
     cout << "Initial numbers:" << endl;
-    c1.printComplex();
-    c2.printComplex();
+    d1.print();
+    cout << endl;
+    d2.print();
     cout << endl;
 
     cout << "After addition:" << endl;
-    ComplexVector d1; 
-    d1.append(c1); // FIXME
-    (c1+c2).printComplex();
+    (d1 + d2).print();
     cout << endl;
 
-    cout << "After subtraction:" << endl;
-    (c1-c2).printComplex();
-    cout << endl;
+    // d1.print();
+    // d2.print();
+    // d3.print();
 
-    cout << "After multiplication:" << endl;
-    (c1*c2).printComplex();
-    cout << endl;
 
-    cout << "After division:" << endl;
-    (c1/c2).printComplex();
-    cout << endl;
+
+    // cout << "After subtraction:" << endl;
+    // (c1-c2).printComplex();
+    // cout << endl;
+
+    // cout << "After multiplication:" << endl;
+    // (c1*c2).printComplex();
+    // cout << endl;
+
+    // cout << "After division:" << endl;
+    // (c1/c2).printComplex();
+    // cout << endl;
 
     return 0;
 }
