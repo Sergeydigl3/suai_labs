@@ -62,7 +62,7 @@ void Complex::printComplex() {
     else cout << "z=" << this->re << this->im << "*i" << endl;
 }
 
-size_t ComplexVector::size(){return this->array.size();}
+size_t ComplexVector::size() { return this->array.size(); }
 
 void ComplexVector::print() {
     for (size_t i = 0; i < this->array.size(); i++)
@@ -105,14 +105,14 @@ Complex ComplexVector::sub_operation(size_t action, Complex& c1, Complex& c2) {
         return c1 - c2;
         break;
     case 2:
-        return c1*c2;
+        return c1 * c2;
         break;
     case 3:
-        return c1/c2;
+        return c1 / c2;
         break;
 
     default:
-        return c1+c2;
+        return c1 + c2;
         break;
     }
 }
