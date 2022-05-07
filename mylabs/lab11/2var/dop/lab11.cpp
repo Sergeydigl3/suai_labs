@@ -4,13 +4,13 @@
 
 // TODO: Доп 1Есть текстовый файл с абсолютными путями. Сделать группировку по типам рассширений (Заранее указаны)
 
-void pathsplit(char* t_path, char** massive[]) {
-    char drvie_preffix[] = ":\\";
+void pathsplit(const char* t_path, char** massive[], bool& is_file, int& count_el) {
+    char drvie_preffix[] = "://";
     
     int mass_counter = 1;
     *massive = (char**)malloc(sizeof(char*) * mass_counter); (*massive)[mass_counter-1] = NULL;
 
-    char* pch = strtok(t_path, drvie_preffix);
+    char* pch = strtok((char *)t_path, drvie_preffix);
     char* str;
     
 
@@ -24,7 +24,6 @@ void pathsplit(char* t_path, char** massive[]) {
             str[i] = pch[i];
         (*massive)[mass_counter - 2] = str;
         char* t_char = pch;
-
         pch = strtok(NULL, drvie_preffix);
         if (pch == NULL) {
             unsigned int ext_size = 1; // выделяем массив и считаем кол-во символов расширения
@@ -36,6 +35,7 @@ void pathsplit(char* t_path, char** massive[]) {
                 if (str[i] == '.') { extintion_start = i; break; }
             }
             if (extintion_start == -1) continue; // если это директория - выходим
+            is_file = 1;
 
             mass_counter++; *massive = (char**)realloc(*massive, sizeof(char*) * mass_counter); (*massive)[mass_counter-1] = NULL; // берём слот под расширение дополнительно
 
@@ -56,6 +56,8 @@ void pathsplit(char* t_path, char** massive[]) {
             (*massive)[mass_counter - 2] = extintion;
         }
     }
+    if (is_file) count_el = mass_counter-1;
+    else count_el = mass_counter-1;
 }
 
 void printMassive(char **massive){
