@@ -2,10 +2,12 @@
 
 #include <iostream>
 using namespace std;
+#include <time.h>
 
+#define DAY_IN_SEC 86400
 class Date
 {
-private:
+protected:
     int days;
 public:
     Date();
@@ -37,17 +39,25 @@ public:
 class Birthday: public Date
 {
 protected:
-    size_t year;
-    size_t month;
-    size_t day;
+    int year;
+    int month;
+    int day;
+
+
+private:
+    void recalculate();
 
 public:
-    // Birthday(/* args */);
-    Birthday(size_t days);
+    Birthday(int days=0);
+    void setDay(int day);
+    void setMonth(int day);
+    void setYear(int day);
+    int getDay();
+    int getMonth();
+    int getYear();
+
+    friend ostream& operator <<(ostream& os, const Birthday& d);
+    friend istream& operator >>(istream& is, Birthday& d);
 };
 
-Birthday::Birthday(size_t days)
-{
-    
-}
 
