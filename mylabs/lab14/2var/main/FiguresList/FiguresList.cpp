@@ -4,7 +4,8 @@
 #include <iostream>
 using namespace std;
 
-void FigureList::addToHead(FigureNode* n){
+void FigureList::addToHead(Figure* f){
+    FigureNode* n = new FigureNode(f);
     if (head!=NULL) n->setNext(head);
     head = n;
     this->size++;
@@ -37,3 +38,12 @@ void FigureList::erase(int id){
         cout << endl;
     }
 }
+
+int FigureList::genId(){
+    lastId++;
+    return lastId-1;
+}
+
+FigureNode::FigureNode(Figure* f) { 
+    this->f = f; 
+};

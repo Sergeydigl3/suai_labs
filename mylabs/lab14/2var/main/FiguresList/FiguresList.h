@@ -8,7 +8,7 @@ private:
     Figure* f;
 public:
     Figure* getFigure() {return f;}
-    FigureNode(Figure* f) { this->f = f; };
+    FigureNode(Figure* f);
 
     friend class Node;
 };
@@ -17,11 +17,10 @@ public:
 class FigureList : public List
 {
 public:
-    void addToHead(FigureNode* n);
+    void addToHead(Figure* n);
     Figure* findFigure(int id);
     void erase(int id);
     void printAll();
-
 };
 
 
