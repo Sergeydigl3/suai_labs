@@ -20,8 +20,14 @@ class Figure
 {
 protected:
     int id;
+    int x;
+    int y;
+    void genId();
 public:
     int getId();
+    int getX();
+    int getY();
+    void setPoint(int xc, int yc);
     virtual void print() = 0;
 };
 
@@ -31,7 +37,7 @@ private:
     int radius;
     std::string text;
 public:
-    Circle(int radius = 0, std::string text = "");
+    Circle(int x, int y, int radius = 0, std::string text = "");
     void setRadius(int radius);
     void setText(std::string text="");
     int getRadius();
@@ -44,7 +50,7 @@ private:
     int pos_start;
     int pos_end;
 public:
-    Segment(int pos_start = 0, int pos_end = 0);
+    Segment(int x, int y, int pos_start = 0, int pos_end = 0);
     void print() override;
     void setSegment(int pos_start = 0, int pos_end = 0);
     int getPosStart();
