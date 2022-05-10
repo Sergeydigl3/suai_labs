@@ -57,7 +57,7 @@ Date& Date::operator++() {
     return *this;
 }
 Date& Date::operator--() {
-    this->days -= days;
+    this->days -= 1;
     return *this;
 }
 

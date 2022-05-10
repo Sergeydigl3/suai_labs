@@ -10,13 +10,23 @@ using namespace std;
 
 int main() {
 
-    cout << Date(5) + 4 << endl;
-    cout << Date(5) + Date(4) << endl;
-    Date d1 = Date(5) + Date(4);
+    Date d1 = Date(30) + Date(12);
+    Date d2 = Date(12) + 32;
+    cout << "Inital d1: Date->days = " << d1.get_days() << endl;
+    cout << "Inital d2: Date->days = " << d2.get_days() << endl;
     d1++;
-    cout << d1 << endl;
+    d2--;
+    cout << "d1 after oper++: " << d1.get_days()<<endl;
+    cout << "d2 after oper--: " << d2.get_days()<<endl;
 
 
-    // cout << "Sum: " << d1 + d2 << endl;
+    cout << endl <<"Boolean check: " << endl;
+    cout << "d1==d2: " << (d1 == d2) << endl;
+    cout << "d1!=d2: " << (d1 != d2) << endl;
+    cout << "d1>=d2: " << (d1 >= d2) << endl;
+    cout << "d1<=d2: " << (d1 <= d2) << endl;
+    cout << "d1>d2: " << (d1 > d2) << endl;
+    cout << "d1<d2: " << (d1 < d2) << endl;
+
     cout << endl;
 }
