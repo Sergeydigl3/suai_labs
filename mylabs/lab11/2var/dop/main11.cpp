@@ -43,7 +43,7 @@ void path_element::print_path() {
 }
 
 int main() {
-    vector <string> allowed_ext = { "h", "cpp" };
+    vector <string> allowed_ext = { "h", "cpp", "paint"};
 
     vector <vector <path_element>> structed_files;
     structed_files.resize(allowed_ext.size());

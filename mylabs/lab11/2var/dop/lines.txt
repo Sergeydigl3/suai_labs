@@ -3,5 +3,10 @@ C://config/workspace/suai_labs/mylabs/lab11/2var/dop/lab11.h
 C://config/workspace/suai_labs/mylabs/lab11/2var/dop/main11.cpp
 C://config/workspace/suai_labs/mylabs/lab13/2var/main/lab13.cpp
 C://config/workspace/suai_labs/mylabs/lab13/2var/main/lab13.h
+C://config/workspace/suai_labs/mylabs/test.cpp
 C://config/workspace/suai_labs/mylabs/lab13/2var/main/main13.cpp
-C://config/workspace/suai_labs/mylabs/lab13/2var/main/main13
+C://config/workspace/suai_labs/mylabs/lab13/2var/main/main13.cpp
+C://config/workspace/suai_labs/mylabs/lab13/2var/main/main13.cpp
+C://config/workspace/suai_labs/mylabs/lab13/2var/main/main13.cpp
+C://config/workspace/suai_labs/mylabs/lab13/2var/main/main13.cpp
+C://config/workspace/suai_labs/main/main13.paint

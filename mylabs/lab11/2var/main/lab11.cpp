@@ -5,7 +5,7 @@
 // TODO: Доп 1Есть текстовый файл с абсолютными путями. Сделать группировку по типам рассширений (Заранее указаны)
 
 void pathsplit(char* t_path, char** massive[]) {
-    char drvie_preffix[] = ":\\";
+    char drvie_preffix[] = "://";
     
     int mass_counter = 1;
     *massive = (char**)malloc(sizeof(char*) * mass_counter); (*massive)[mass_counter-1] = NULL;
