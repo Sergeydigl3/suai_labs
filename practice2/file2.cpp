@@ -1,7 +1,9 @@
-#include <stdio.h>
+#include <iostream>
 #include <math.h>
 #define N 5
 #define D 3
+
+using namespace std;
 
 unsigned char count_ones(unsigned char n) {
     unsigned char w = 0;
@@ -11,9 +13,6 @@ unsigned char count_ones(unsigned char n) {
     }
     return w;
 }
-
-// void brutforce(in)
-
 
 int main()
 {
@@ -37,14 +36,15 @@ int main()
                 mark[i] = 1;
 
             }
-            printf("%d ", mark[i]);
+            cout << mark[i] << " ";
         }
         for (zero = 0; (mark[zero] != 0 && zero<size); zero++);
-        printf("\n");
+        cout << endl;
     }
 
-    printf("\n%d,%d,%d", CodeBook[0], CodeBook[1], CodeBook[2]);
-
+    cout << "Answers: ";
+    for (size_t i = 0; i < M; i++) cout << CodeBook[i] << " ";
+    cout << endl;
 
     return 0;
 }
