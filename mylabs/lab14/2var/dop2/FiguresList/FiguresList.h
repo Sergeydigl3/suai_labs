@@ -19,6 +19,8 @@ class FigureList : public List
 public:
     void addToHead(Figure* n);
     Figure* findFigure(int id);
+    Figure* get(int id);
+
     void erase(int id);
     void printAll();
 };

@@ -8,31 +8,31 @@ using namespace std;
 // dop Создать класс многоугольник, который задаётся массивом координат. ПРи создании нужно проверить является ли , но является пмассивом сегментов. Создать при условии, что это есть многоугольник
 int main(int argc, char const* argv[])
 {
-    Circle Suppa(0, 45, 32, "Ura pobeda ura pobeda");
-    Segment Pupper(23, 234, 242, 32);
+
+    Segment Pupper1(0, 0, 0, 1);
+    Segment Pupper2(0, 1, 1, 1);
+    Segment Pupper3(1, 1, 0, 0);
+    Segment Pupper4(1, 1, 0, 2);
+    // Segment Pupper4(23, 234, 242, 32);
 
 
     FigureList flist;
 
-    flist.addToHead(&Suppa);
-    flist.addToHead(&Pupper);
-
-    flist.findFigure(0)->print();
-    flist.findFigure(1)->print();
+    flist.addToHead(&Pupper4);
+    flist.addToHead(&Pupper3);
+    flist.addToHead(&Pupper2);
+    flist.addToHead(&Pupper1);
+// TODO: Не проверяет лишние элементы
     cout << endl;
 
-    Pupper.setSegment(49, 35);
+    // Pupper.setSegment(49, 35);
 
-    flist.findFigure(0)->print();
+    // cout << endl << endl << "Print list:" << endl;
+    // flist.printAll();
 
-    cout << endl << endl << "Print list:" << endl;
-    flist.printAll();
-
-    flist.erase(1);
-    cout << endl << endl << "Print list:" << endl;
-    flist.printAll();
-
+    // flist.get(3)->print();
+    Polygon Polina(&flist);
     cout << endl << endl;
-    flist.findFigure(0)->print();
+    // flist.findFigure(0)->print();
     return 0;
 }

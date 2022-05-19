@@ -17,22 +17,12 @@ int main(int argc, char const* argv[])
     flist.addToHead(&Suppa);
     flist.addToHead(&Pupper);
 
-    flist.findFigure(0)->print();
-    flist.findFigure(1)->print();
     cout << endl;
 
-    Pupper.setSegment(49, 35);
-
-    flist.findFigure(0)->print();
-
-    cout << endl << endl << "Print list:" << endl;
-    flist.printAll();
-
-    flist.erase(1);
     cout << endl << endl << "Print list:" << endl;
     flist.printAll();
 
     cout << endl << endl;
-    flist.findFigure(0)->print();
+    // flist.findFigure(0)->print();
     return 0;
 }

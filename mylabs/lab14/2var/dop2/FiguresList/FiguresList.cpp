@@ -27,6 +27,15 @@ Figure* FigureList::findFigure(int id){
     return ((FigureNode* )currentNode)->getFigure();
 }
 
+Figure* FigureList::get(int id){
+    // Node* retNode = NULL;
+    Node* currentNode = this->head;
+    if (id>=this->size) return NULL;
+    for (size_t i = 0; i < id; i++)
+        currentNode = currentNode->getNext();
+    return ((FigureNode*)currentNode)->getFigure();
+}
+
 void FigureList::printAll(){
     FigureNode* currentNode = (FigureNode*)this->head;
     while (currentNode)

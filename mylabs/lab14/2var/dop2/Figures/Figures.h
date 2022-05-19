@@ -1,19 +1,7 @@
 #pragma once
 
 #include <string>
-// class FigureList
-// {
-// private:
-//     /* data */
-// public:
-//     FigureList(/* args */);
-//     void addToHead();
-//     Figure findFigure(int id);
-//     void erase(Figure* figure);
-//     void printAll();
-
-//     ~FigureList();
-// };
+// #include "../FiguresList/FiguresList.h"
 
 
 class Figure
@@ -55,4 +43,14 @@ public:
     void setSegment(int pos_start = 0, int pos_end = 0);
     int getPosStart();
     int getPosEnd();
+};
+
+#include "../FiguresList/FiguresList.h"
+class Polygon : public Figure {
+private:
+    FigureList *list;
+    int genPoly(FigureList *l);
+public:
+    Polygon(FigureList* l);
+    void print() override;
 };
