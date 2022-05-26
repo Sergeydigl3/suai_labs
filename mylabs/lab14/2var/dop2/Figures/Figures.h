@@ -48,9 +48,10 @@ public:
 #include "../FiguresList/FiguresList.h"
 class Polygon : public Figure {
 private:
-    FigureList *list;
+    FigureList *list = NULL;
     int genPoly(FigureList *l);
 public:
     Polygon(FigureList* l);
+    bool exist();
     void print() override;
 };
