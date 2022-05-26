@@ -1,5 +1,18 @@
-#include "hamming.h"
+#include "task2.h"
 #include "stdio.h"
+
+int min_hamming(uint64* arr, int size) {
+  int minim = size;
+  for (uint64 a = 0; a < size; a++) {
+    for (uint64 b = a + 1; b < size; b++) {
+      if (arr[a] != arr[b]) {
+        int hamm = count_ones(arr[a] ^ arr[b]);
+        minim = hamm < minim ? hamm : minim;
+      }
+    }
+  }
+  return minim;
+}
 
 int main() {
   printf(
@@ -20,6 +33,6 @@ int main() {
       }
     }
   }
-  
+
   printf("\ncount: %d", count);
 }
