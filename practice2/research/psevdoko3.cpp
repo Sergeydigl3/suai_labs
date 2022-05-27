@@ -1,6 +1,6 @@
 #include <iostream>
 #include <math.h>
-
+#include <chrono>
 typedef unsigned long long uint64;
 using namespace std;
 
@@ -14,7 +14,7 @@ uint64 count_ones(uint64 n) {
 }
 // Исходными данными программы является N - максимальная длина кода, D - минимальное расстояние кода. 
 
-clock_t f(uint64 N, uint64 D) {
+auto f(uint64 N, uint64 D, size_t &counter) {
     size_t M = 0; // заводим счётчик числа кодовых слов в книге
     uint64 size = pow(2, N);
     uint64 mark[size] = { 0 }; // создаём вспомогательный массив для пометок заполненный 0
@@ -22,7 +22,7 @@ clock_t f(uint64 N, uint64 D) {
 
 
     uint64 zero = 0;
-    clock_t t1 = clock();
+    auto t1 = chrono::high_resolution_clock::now();
     while (1) // выолняем шаги в цикле до тех пор пока нули находятся в пределах длины: 
     {
         // -------------------------------------------------
@@ -45,27 +45,49 @@ clock_t f(uint64 N, uint64 D) {
     // cout << "Answers: ";
     // for (size_t i = 0; i < M; i++) cout << CodeBook[i] << " ";
     // cout << endl << M << endl;
+    counter = M;
     return t1;
 };
 
 
-int main()
-{
-    for (size_t D = 3; D < 17; D++)
-    {
-        cout << "D=" << D << endl;
-        for (size_t N = 5; N < 19; N++)
-        {
-            clock_t t1 = f(N, D);
-            clock_t t2 = clock();
-            time_t duration = (t2 - t1);
-            cout << duration << endl;
-        }
-        cout <<endl;
+// int main()
+// {
+//     int ham_pairs[][2] = { {7,4}, {8,4}, {15,11}, {16,11} };
+//     int count = sizeof(ham_pairs) / (sizeof(int) * 2);
+//     // cout << count;
+//     for (size_t i = 0; i < count; i++)
+//     {
+
+//         auto t1 = f(ham_pairs[i][0], ham_pairs[i][1]);
+//         auto t2 = chrono::high_resolution_clock::now();
+//         chrono::duration<float> duration = t2 - t1;
+//         cout << duration.count() << endl;
+
+//         cout << endl;
+//     }
+
+//     return 0;
+// }
+
+
+int main() {
+    for (int d = 1; d <= 19; d++) {
+            // int ham_pairs[][2] = { {7,4}, {8,4}, {15,11}, {16,11} };
+            // int count = sizeof(ham_pairs) / (sizeof(int) * 2);
+            // cout << count;
+            cout << "d: " << d << endl;
+            for (size_t n = 1; n < 19; n++)
+            {   
+                size_t counter = 0;
+                auto t1 = f(n, d, counter);
+                auto t2 = chrono::high_resolution_clock::now();
+                chrono::duration<float> duration = t2 - t1;
+                // cout << duration.count() << endl;
+
+                // cout << endl;
+                cout << "N: " << n << " Time: " << duration.count() << " count: " << counter << endl;
+            }
+
+
     }
-
-
-
-
-    return 0;
 }

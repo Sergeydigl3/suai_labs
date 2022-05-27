@@ -2,7 +2,7 @@
 #include <math.h>
 // #define N 18
 // #define D 5
-
+#include <chrono>
 typedef unsigned long long uint64;
 
 class Node
@@ -30,6 +30,7 @@ public:
 
 public:
     List(uint64 count);
+    ~List();
     void push_back(Node* n);
     uint64 get_first();
     Node* get_first_node();
@@ -60,6 +61,17 @@ void List::push_back(Node* n) {
 
 Node::Node(uint64 x) {
     this->x = x;
+}
+
+List::~List()
+{
+    Node* currentNode = this->head;
+    while (currentNode)
+    {
+        Node* nextNode = currentNode->getNext();
+        delete currentNode;
+        currentNode = nextNode;
+    }
 }
 
 List::List(uint64 count) {
@@ -131,10 +143,10 @@ void Node::setPrev(Node* node) {
     this->prev = node;
 }
 
-clock_t f(uint64 N, uint64 D) {
+auto f(uint64 N, uint64 D, size_t &counter) {
     size_t M = 0; // заводим счётчик числа кодовых слов в книге
     uint64 size = pow(2, N);
-    uint64 mark[size] = { 0 }; // создаём вспомогательный массив для пометок заполненный 0
+
     uint64 CodeBook[size] = { 0 }; // Заводим массив для списка кодовых слов с запасом.
 
     List fl(size);
@@ -142,7 +154,7 @@ clock_t f(uint64 N, uint64 D) {
     uint64 zero;
     Node* t_next;
     Node* curNode;
-    clock_t t1 = clock();
+    auto t1 = chrono::high_resolution_clock::now();
     while (fl.size > 0)
     {
         // -------------------------------------------------
@@ -162,27 +174,48 @@ clock_t f(uint64 N, uint64 D) {
     // cout << "Answers: ";
     // for (size_t i = 0; i < M; i++) cout << CodeBook[i] << " ";
     // cout << endl << M << end
+    counter = M;
     return t1;
 }
 
 // Исходными данными программы является N - максимальная длина кода, D - минимальное расстояние кода. 
-int main()
-{
-    // int ham_pairs[][2] = { {7,4}, {8,4}, {15,11}, {16,11} };
-    // int count = sizeof(ham_pairs)/(sizeof(int)*2);
-    // cout << count;
-    for (size_t D = 3; D < 17; D++)
-    {
-        cout << "D=" << D << endl;
-        for (size_t N = 5; N < 19; N++)
-        {
-            clock_t t1 = f(N, D);
-            clock_t t2 = clock();
-            time_t duration = (t2 - t1);
-            cout << duration << endl;
-        }
-        cout << endl;
-    }
+// int main()
+// {
+//     int ham_pairs[][2] = { {7,4}, {8,4}, {15,11}, {16,11} };
+//     int count = sizeof(ham_pairs) / (sizeof(int) * 2);
+//     // cout << count;
+//     for (size_t i = 0; i < count; i++)
+//     {
 
-    return 0;
+//         auto t1 = f(ham_pairs[i][0], ham_pairs[i][1]);
+//         auto t2 = chrono::high_resolution_clock::now();
+//         chrono::duration<float> duration = t2 - t1;
+//         cout << duration.count() << endl;
+
+//         cout << endl;
+//     }
+
+//     return 0;
+// }
+
+int main() {
+    for (int d = 1; d <= 19; d++) {
+            // int ham_pairs[][2] = { {7,4}, {8,4}, {15,11}, {16,11} };
+            // int count = sizeof(ham_pairs) / (sizeof(int) * 2);
+            // cout << count;
+            cout << "d: " << d << endl;
+            for (size_t n = 1; n < 19; n++)
+            {
+                size_t count = 0;
+                auto t1 = f(n, d, count);
+                auto t2 = chrono::high_resolution_clock::now();
+                chrono::duration<float> duration = t2 - t1;
+                // cout << duration.count() << endl;
+
+                // cout << endl;
+                cout << "N: " << n << " Time: " << duration.count() << " count: " << count << endl;
+            }
+
+
+    }
 }

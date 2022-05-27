@@ -18,7 +18,6 @@ int main()
 {  
     size_t M = 0; // заводим счётчик числа кодовых слов в книге
     uint64 size = pow(2, N);
-    uint64 mark[size] = { 0 }; // создаём вспомогательный массив для пометок заполненный 0
     uint64 CodeBook[size] = { 0 }; // Заводим массив для списка кодовых слов с запасом.
 
     List fl(size);
@@ -43,9 +42,9 @@ int main()
         }
     }
 
-    // cout << "Answers: ";
-    // for (size_t i = 0; i < M; i++) cout << CodeBook[i] << " ";
-    // cout << endl << M << endl;
+    cout << "Answers: ";
+    for (size_t i = 0; i < M; i++) cout << CodeBook[i] << " ";
+    cout << endl << M << endl;
     clock_t t2 = clock();
     time_t duration = (t2 - t1);
     cout << endl << "Duration: "<< duration << endl;
