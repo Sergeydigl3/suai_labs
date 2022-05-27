@@ -3,7 +3,7 @@ typedef unsigned long long uint64;
 
 class Node
 {
-protected: 
+public: 
     Node* next = NULL;
     Node* prev = NULL;
 
@@ -19,7 +19,7 @@ public:
 
 class List
 {
-protected:
+public:
     uint64 size = 0;
     Node* head = NULL;
     Node* tail = NULL;

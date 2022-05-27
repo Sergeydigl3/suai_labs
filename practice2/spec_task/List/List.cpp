@@ -45,28 +45,28 @@ void List::rm_first(){
 void List::rm_by_node(Node* node){
     if (size<=0) return;
     if (size==1) this->tail = NULL;
-    Node* n_next = node->getNext();
-    Node* n_prev = node->getPrev();
+    Node* n_next = node->next;
+    Node* n_prev = node->prev;
     
     
     if (node == this->head)
 	{
 		this->head = n_next;
 		if (n_next != NULL)
-			n_next->setPrev(NULL);
+			n_next->prev = NULL;
 		
 	}
     else if (node == this->tail)
     {
         this->tail = n_prev;
         if (n_prev != NULL)
-			n_prev->setNext(NULL);
+			n_prev->next = NULL;
     }
 	else
 	{
-		n_prev->setNext(n_next);
+		n_prev->next = n_next;
 		if (n_next != NULL)
-			n_next->setPrev(n_prev);
+			n_next->prev = n_prev;
 	}
     delete node;
 	this->size--;

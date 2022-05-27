@@ -1,6 +1,6 @@
 #include <iostream>
 #include <math.h>
-#define N 15
+#define N 18
 #define D 11
 #include "List/List.h"
 using namespace std;
@@ -24,18 +24,20 @@ int main()
     List fl(size);
 
     uint64 zero;
+    Node* t_next;
+    Node* curNode;
     clock_t t1 = clock();
-    while (fl.Size() > 0)
+    while (fl.size > 0)
     {
         // -------------------------------------------------
-        zero = fl.get_first();
+        zero = fl.head->x;
         CodeBook[M] = zero;
         fl.rm_first();
         M++;
-        Node* t_next;
-        for (Node* curNode = fl.get_first_node(); curNode != NULL; curNode = t_next)
+        
+        for (curNode = fl.head; curNode != NULL; curNode = t_next)
         {
-            t_next = curNode->getNext();
+            t_next = curNode->next;
             if (count_ones(curNode->x ^ CodeBook[M - 1]) < D)
                 fl.rm_by_node(curNode);
         }

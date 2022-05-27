@@ -1,7 +1,7 @@
 #include <iostream>
 #include <math.h>
 #define N 18
-#define D 11
+#define D 5
 typedef unsigned long long uint64;
 using namespace std;
 
@@ -45,9 +45,9 @@ int main()
         // cout << endl;
     }
 
-    // cout << "Answers: ";
-    // for (size_t i = 0; i < M; i++) cout << CodeBook[i] << " ";
-    // cout << endl << M << endl;
+    cout << "Answers: ";
+    for (size_t i = 0; i < M; i++) cout << CodeBook[i] << " ";
+    cout << endl << M << endl;
     clock_t t2 = clock();
     time_t duration = (t2 - t1);
     cout << endl << "Duration: "<< duration << endl;
