@@ -1,8 +1,8 @@
 #include <iostream>
 #include <math.h>
-#define N 18
+#define N 15
 #define D 11
-typedef unsigned long long uint64;
+#include "List/List.h"
 using namespace std;
 
 uint64 count_ones(uint64 n) {
@@ -15,34 +15,30 @@ uint64 count_ones(uint64 n) {
 }
 // Исходными данными программы является N - максимальная длина кода, D - минимальное расстояние кода. 
 int main()
-{   
-    
+{  
     size_t M = 0; // заводим счётчик числа кодовых слов в книге
-    uint64 size = pow(2, N); 
+    uint64 size = pow(2, N);
     uint64 mark[size] = { 0 }; // создаём вспомогательный массив для пометок заполненный 0
     uint64 CodeBook[size] = { 0 }; // Заводим массив для списка кодовых слов с запасом.
 
-    
-    uint64 zero=0;
+    List fl(size);
 
+    uint64 zero;
     clock_t t1 = clock();
-    while (1) // выолняем шаги в цикле до тех пор пока нули находятся в пределах длины: 
-    { 
+    while (fl.Size() > 0)
+    {
         // -------------------------------------------------
-        for (zero = 0; (mark[zero] != 0 && zero<size); zero++); // Шаг 0 выполняем поиск первой свободной последовательности в массиве mark, записываем в zero
-        if (zero>=size) break; // Если Шаг 0 перебрал все элементы выходим из 
-        CodeBook[M] = zero; // Шаг 1 Выберем в качестве кодового слова первую свободную последовательнотсть        
-        mark[zero] = 2;
+        zero = fl.get_first();
+        CodeBook[M] = zero;
+        fl.rm_first();
         M++;
-
-        for (uint64 i = 0; i < size;i++)
+        Node* t_next;
+        for (Node* curNode = fl.get_first_node(); curNode != NULL; curNode = t_next)
         {
-            if (mark[i] == 0 && (count_ones(i ^ CodeBook[M - 1]) < D))
-                mark[i] = 1;
-
-            // cout << mark[i] << " ";
+            t_next = curNode->getNext();
+            if (count_ones(curNode->x ^ CodeBook[M - 1]) < D)
+                fl.rm_by_node(curNode);
         }
-        // cout << endl;
     }
 
     // cout << "Answers: ";
@@ -51,6 +47,5 @@ int main()
     clock_t t2 = clock();
     time_t duration = (t2 - t1);
     cout << endl << "Duration: "<< duration << endl;
-
     return 0;
 }
