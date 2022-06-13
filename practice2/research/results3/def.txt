@@ -14,7 +14,6 @@ N: 12 Time: 0.234014 count: 4096
 N: 13 Time: 1.00213 count: 8192
 N: 14 Time: 4.3262 count: 16384
 N: 15 Time: 18.1402 count: 32768
-N: 16 Time: 77.7965 count: 65536
 N: 17 Time: 327.815 count: 131072
 N: 18 Time: 1389.05 count: 262144
 d: 2

@@ -115,7 +115,7 @@ void List::rm_by_node(Node* node) {
         if (n_next != NULL)
             n_next->prev = n_prev;
     }
-    delete node;
+    // delete node;
     this->size--;
 
 }
