@@ -37,8 +37,11 @@ Date Date::operator+(int days) {
     return Date(this->days + days);
 }
 
-Date Date::operator+(Date d2) {
-    return Date(this->days + d2.days);
+// Date Date::operator+(Date d2) {
+//     return Date(this->days + d2.days);
+// }
+Date operator+(const Date& d1, const Date& d2){
+    return Date(d1.days+d2.days);
 }
 
 Date& Date::operator+=(int days) {

@@ -12,8 +12,10 @@ int main() {
 
     Date d1 = Date(30) + Date(12);
     Date d2 = Date(12) + 32;
+    Date d3 = 13 + Date(12);
     cout << "Inital d1: Date->days = " << d1.get_days() << endl;
     cout << "Inital d2: Date->days = " << d2.get_days() << endl;
+    cout << "Inital d3: Date->days = " << d3.get_days() << endl;
     d1++;
     d2--;
     cout << "d1 after oper++: " << d1.get_days()<<endl;

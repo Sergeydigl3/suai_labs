@@ -61,6 +61,7 @@ int strlen(char *str, int dlinna)
 
 
 int is_not_free(char* mass, int dlina){
+    dlina+=10000;
     for(int x=0; x<dlina;x++){
         if (mass[x]!='\0')
             return 1;
