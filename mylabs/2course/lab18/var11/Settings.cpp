@@ -70,14 +70,9 @@ void Settings::load(const std::string& filename) {
 void Settings::save(const std::string& filename) {
     ofstream file(filename);
     if (file.is_open()) {
-        file << data_raw<int>(IntData);
-        // for (size_t i = 0; i < IntData.count; i++)
-        //     file << IntData.data[i].key << "=" << IntData.data[i].value << "\n";
+        file << IntData;
         file << "===" << "\n";
-        // for (size_t i = 0; i < StrData.count; i++)
-        //     file << StrData.data[i].key << "=" << StrData.data[i].value << "\n";
-        file << data_raw<std::string>(StrData);
-
+        file << StrData;
 
         file.close();
     }

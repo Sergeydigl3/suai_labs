@@ -1,4 +1,5 @@
-colo2r=
+colo2r=2
 ===
-color1=
-color3=
+color1=blue
+color3=white
+55555

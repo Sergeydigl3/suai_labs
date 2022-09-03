@@ -8,10 +8,14 @@
 
 #include "lab17.h"
 #include "iostream"
+#include <string>
 
 int main(int argc, char const *argv[])
 {
     cset<int> b11;
+    cset<std::string> stri;
+    stri.insert("ABOBA");
+    stri.insert("OBAPRO");
     b11.insert(4);
     b11.insert(4);
     b11.insert(5);
@@ -35,6 +39,9 @@ int main(int argc, char const *argv[])
     
     
     cout << b11.find(4) << endl;
+    
+
+    cout << stri << endl;
     return 0;
 }
 // int to str

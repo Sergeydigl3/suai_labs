@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <iostream>
+
 #include "exception.h"
 
 template <class T>
@@ -23,22 +24,21 @@ public:
     void add(const std::string& key, const T& value);
     T& find(const std::string& key);
     void erase(const std::string& key);
+    std::string data_raw();
 
-    template<typename T3>
-    friend std::string data_raw(UniStore<T3>& uni);
-    // friend std::string data_raw(const UniStore<std::string>& uni);
 
-    
+    // Override for the console output
     template<typename T2>
     friend std::ostream& operator<<(std::ostream& os, const UniStore<T2>& set);
+
+
+    // Override for the file output
+    template<typename T3>
+    friend std::ofstream& operator<<(std::ofstream& file, const UniStore<T3>& set);
 
     ~UniStore();
 };
 
-template<class T> // primary template
-void data_raw(UniStore<T>& uni);
-template<>        // specialization for T = int
-void data_raw(UniStore<std::string>& uni);
 
 template <class T>
 UniStore<T>::UniStore()
@@ -49,27 +49,19 @@ UniStore<T>::UniStore()
 
 
 
-template <class T>
-std::string data_raw(UniStore<T>& uni) {
+template <typename T>
+std::string UniStore<T>::data_raw() {
     std::string out;
-    for (size_t i = 0; i < uni.count; i++) {
-
-        out += uni.data[i].key;
+    for (size_t i = 0; i < count; i++) {
+        out += data[i].key;
         out += "=";
-        out += std::to_string(uni.data[i].value);
-        out += "\n";
-    }
-
-    return out;
-}
-template <>
-std::string data_raw(UniStore<std::string>& uni) {
-    std::string out;
-    for (size_t i = 0; i < uni.count; i++) {
-
-        out += uni.data[i].key;
-        out += "=";
-        out += uni.data[i].value;
+        if (std::is_same<T, std::string>::value)
+            out += data[i].value;
+        else{
+            T value = data[i].value;
+            out += std::to_string(data[i].value);
+        }
+            
         out += "\n";
     }
 
@@ -82,6 +74,14 @@ std::ostream& operator<<(std::ostream& os, const UniStore<T2>& store) {
     for (size_t i = 0; i < store.count; i++)
         os << store.data[i].key << " = " << store.data[i].value << "\n";
     return os;
+}
+
+
+template<typename T3>
+std::ofstream& operator<<(std::ofstream& file, const UniStore<T3>& store) {
+    for (size_t i = 0; i < store.count; i++)
+        file << store.data[i].key << "=" << store.data[i].value << "\n";
+    return file;
 }
 
 template <class T>
