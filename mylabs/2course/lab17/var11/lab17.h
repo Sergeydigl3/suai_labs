@@ -100,7 +100,7 @@ cset<T> cset<T>::intersect(const cset& s) {
 
     cset<T> new_cset;
     
-    size_t currentThis, currentS = 0;
+    size_t currentThis = 0, currentS = 0;
     while (currentThis<this->size_p && currentS<s.size_p){
         if (this->array[currentThis]<s.array[currentS]) currentThis++;
         else if (this->array[currentThis]<s.array[currentS]) currentS++;
