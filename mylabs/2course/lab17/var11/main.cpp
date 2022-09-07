@@ -14,8 +14,17 @@ int main(int argc, char const *argv[])
 {
     cset<int> b11;
     cset<std::string> stri;
-    stri.insert("ABOBA");
-    stri.insert("OBAPRO");
+    stri.insert("yes");
+    stri.insert("Okay");
+    stri.insert("ddd");
+    stri.insert("dd");
+    stri.insert("d");
+    stri.insert("a");
+    stri.insert("ab");
+    stri.insert("abc");
+    stri.insert("abe");
+    stri.insert("abf");
+    stri.insert("aba");
     b11.insert(4);
     b11.insert(4);
     b11.insert(5);

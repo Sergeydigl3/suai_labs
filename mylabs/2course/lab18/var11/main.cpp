@@ -16,26 +16,26 @@
 #include "Settings.h"
 using namespace std;
 
-// int main(int argc, char const *argv[])
-// {
-//     Settings sets;
+int main(int argc, char const *argv[])
+{
+    Settings sets;
 
 
-//     sets.add("color1", "blue");
-//     sets.add("color1", "blue");
-//     sets.add("color2", "red");
-//     sets.add("color3", "white");
-//     sets.add("colo2r", 2);
+    sets.add("color1", "blue");
+    sets.add("color1", "blue");
+    sets.add("color2", "red");
+    sets.add("color3", "white");
+    sets.add("colo2r", 2);
 
-//     cout << sets << "\n----------------------------------\nAfter Delete operation\n";
+    cout << sets << "\n----------------------------------\nAfter Delete operation\n";
 
-//     sets.erase_str("color2");
-//     cout << sets << "\n\n----------------------------------\n";
-//     cout << "Try find.\ncolor3 = " << sets.find_str("color3") << "\n";
+    sets.erase_str("color2");
+    cout << sets << "\n\n----------------------------------\n";
+    cout << "Try find.\ncolor3 = " << sets.find_str("color3") << "\n";
 
-//     sets.save("aboba.txt");
-//     return 0;
-// }
+    sets.save("aboba.txt");
+    return 0;
+}
 
 
 int main(int argc, char const *argv[])
