@@ -1,0 +1,4 @@
+colo2r=2
+===
+color1=blue
+color3=white
