@@ -1,29 +1,16 @@
 #include <iostream>
-#include <vector>
 
-typedef std::vector<std::vector<int>> TArray;
+#include "lab20.h"
 
-class Graphs
+using namespace std;
+
+
+
+int main(int argc, char const* argv[])
 {
-private:
-    /* data */
-public:
-    Graphs(/* args */);
-    ~Graphs();
-};
-
-Graphs::Graphs(/* args */)
-{
-}
-
-Graphs::~Graphs()
-{
-}
-
-
-int main(int argc, char const *argv[])
-{
-    TArray a;
-
+    Graphs gr("test.txt");
+    cout << gr << "\n\n";
+    string prefix = "";
+    gr.dfs(gr.root, prefix);
     return 0;
 }
