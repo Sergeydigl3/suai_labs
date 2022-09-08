@@ -6,6 +6,9 @@
 //      set intersect(const set& s) --- пересечение (бросает исключение при пересечении с пустым множеством)
 //      operator<< для вывода
 
+
+// dop save load json
+
 #include "lab17.h"
 #include "iostream"
 #include <string>
