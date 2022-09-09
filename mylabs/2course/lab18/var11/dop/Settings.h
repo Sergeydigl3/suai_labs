@@ -28,6 +28,7 @@ public:
     void erase_str(const std::string& name);
     int find_int(const std::string& name);
     std::string find_str(const std::string& name);
+    void read_bmp(const std::string& filename);
     void load(const std::string& filename); //загрузка из файла
     void save(const std::string& filename);
 

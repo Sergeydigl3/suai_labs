@@ -66,7 +66,8 @@ using namespace std;
 int main(int argc, char const *argv[])
 {
     Settings sets;
-    sets.load("test.txt");
+    // sets.load("test.txt");
+    sets.read_bmp("sample.bmp");
     cout << sets << "\n";
     return 0;
 }

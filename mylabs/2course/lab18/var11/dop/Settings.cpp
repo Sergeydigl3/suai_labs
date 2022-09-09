@@ -1,4 +1,5 @@
 #include "Settings.h"
+#include "bitmap_image.hpp"
 #include <ostream>
 #include <fstream>
 
@@ -49,7 +50,7 @@ void Settings::load(const std::string& filename) {
             }
             i++;
             std::string value;
-            for (; i <line.size(); i++)
+            for (; i < line.size(); i++)
                 value.push_back(line[i]);
             switch (stage)
             {
@@ -78,6 +79,20 @@ void Settings::save(const std::string& filename) {
     }
 
 }
+
+void Settings::read_bmp(const std::string& filename) {
+    bitmap_image image(filename);
+
+    if (!image)
+    {
+        cerr << "Error - Failed to open: "<< filename <<"\n";
+        return;
+    }
+    add("height", image.height());
+    add("width", image.width());
+
+}
+
 
 ostream& operator<<(ostream& os, const Settings& sets) {
     os << "Str - Int\n";
