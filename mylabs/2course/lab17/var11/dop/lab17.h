@@ -8,12 +8,37 @@
 #pragma once
 
 #include "exception.h"
+
 #include <iostream>
 #include <ostream>
 #include <fstream>
 using namespace std;
 #include "includes/json.hpp"
-using json=nlohmann::json;
+using json = nlohmann::json;
+
+struct point
+{
+    int x;
+    int y;
+    int z;
+
+    friend ostream& operator<<(ostream& os, const point& p) {
+        os << "( " << p.x << " " << p.y << " " << p.z << ")";
+        return os;
+    }
+
+};
+
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(point, x, y, z)
+
+bool operator==(const point& lhs, const point& rhs) {
+    return lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z;
+}
+
+bool operator>(const point& lhs, const point& rhs) {
+    return (lhs.x*lhs.x+lhs.y*lhs.y+lhs.z*lhs.z) == (rhs.x*rhs.x+rhs.y*rhs.y+rhs.z*rhs.z);
+}
+
 template <typename T >
 class cset
 {
@@ -31,7 +56,7 @@ public:
     cset intersect(const cset& s);
     void save_json(const std::string& filename);
     void load_json(const std::string& filename);
-    
+
     ~cset();
 
     template< typename T2 >
@@ -72,26 +97,26 @@ cset<T>& cset<T>::operator=(const cset& s)
 
 bool operator<(const string& s1, const string& s2) {
     int size = s1.size() - s2.size();
-    if (size != 0) return size<0;
-    return s1.compare(s2)<0;
+    if (size != 0) return size < 0;
+    return s1.compare(s2) < 0;
 }
 
 bool operator>(const string& s1, const string& s2) {
     int size = s1.size() - s2.size();
-    if (size != 0) return size>0;
-    return s1.compare(s2)>0;
+    if (size != 0) return size > 0;
+    return s1.compare(s2) > 0;
 }
 
 bool operator<=(const string& s1, const string& s2) {
     int size = s1.size() - s2.size();
-    if (size != 0) return size<0;
-    return s1.compare(s2)<=0;
+    if (size != 0) return size < 0;
+    return s1.compare(s2) <= 0;
 }
 
 bool operator>=(const string& s1, const string& s2) {
     int size = s1.size() - s2.size();
-    if (size != 0) return size>0;
-    return s1.compare(s2)>=0;
+    if (size != 0) return size > 0;
+    return s1.compare(s2) >= 0;
 }
 
 template <class T>
@@ -124,18 +149,18 @@ void cset<T>::insert(const T& value) {
 }
 
 template <class T>
-void cset<T>::save_json(const std::string& filename){
+void cset<T>::save_json(const std::string& filename) {
     std::ofstream file(filename);
     json o;
     o["count"] = size_p;
     for (size_t i = 0; i < size_p; i++)
         o["data"].push_back(array[i]);
-    
+
     file << o;
 }
 
 template <class T>
-void cset<T>::load_json(const std::string& filename){
+void cset<T>::load_json(const std::string& filename) {
     std::ifstream file(filename);
     json j;
     file >> j;
@@ -143,9 +168,9 @@ void cset<T>::load_json(const std::string& filename){
     array = new T[size_p];
     for (size_t i = 0; i < size_p; i++)
     {
-        array[i] =  j["data"][i];
+        array[i] = j["data"][i];
     }
-    
+
     file.close();
 }
 

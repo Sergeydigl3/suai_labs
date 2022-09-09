@@ -59,6 +59,22 @@ void do1(){
 
 }
 
+void do3(){
+    cset<point> points_set;
+    points_set.insert({15, 15, 14});
+    points_set.insert({12, 15, 14});
+    points_set.insert({15, 15, 14});
+    points_set.insert({13, 15, 14});
+    points_set.insert({15, 12, 14});
+    points_set.save_json("points.json");
+}
+
+void do4(){
+    cset<point> points_set;
+    points_set.load_json("points.json");
+    cout << points_set;
+}
+
 void do2(){
     cset<std::string> test;
     test.load_json("test.json");
@@ -69,7 +85,9 @@ void do2(){
 int main(int argc, char const *argv[])
 {
     // do1();
-    do2();
+    // do2();
+    // do3();
+    do4();
     return 0;
 }
 // int to str
