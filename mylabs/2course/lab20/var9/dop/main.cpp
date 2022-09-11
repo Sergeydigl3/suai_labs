@@ -14,11 +14,19 @@ using namespace std;
 
 int main(int argc, char const* argv[])
 {
-    // Graphs gr("test.txt");
-    Graphs gr("gr.txt");
+    Graphs gr("test.txt");
+    // Graphs gr("gr.txt");
 
     cout << gr << "\n\n";
     string prefix = "";
-    gr.dfs(gr.root, prefix);
+    // gr.dfs(gr.root, prefix);
+
+    logger log;
+    vector<int> history;
+    gr.dfs_long_path(gr.root, prefix, history, log);
+
+    cout << log << "\n\n";
+    // gr.save("graphviz.dot");
+    gr.save_long_path("graphviz.dot", log);
     return 0;
 }

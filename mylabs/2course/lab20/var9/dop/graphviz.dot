@@ -1,0 +1,13 @@
+digraph {
+1 -> 2[color=red; penwidth=3];
+1 -> 6;
+2 -> 7[color=red; penwidth=3];
+2 -> 9[color=red; penwidth=3];
+3 -> 5;
+3 -> 8;
+4 -> 1[color=red; penwidth=3];
+4 -> 6;
+6 -> 2;
+6 -> 7;
+8 -> 5;
+}
