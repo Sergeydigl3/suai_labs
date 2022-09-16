@@ -13,6 +13,7 @@ typedef struct {
 	uint32_t Symbol;
 	uint32_t Count;
 	uint32_t Code;
+	uint32_t MyCode;
 	uint32_t Bits;
 } Symbol;
 
@@ -21,6 +22,8 @@ static void initBitStream(BitStream* stream, uint8_t* buffer)
 	stream->BytePointer = buffer;
 	stream->BitPosition = 0;
 }
+
+ split_2_groups(Symbol* sym)
 
 static void writeBits(BitStream* stream, uint32_t x, uint32_t bits)
 {
@@ -79,7 +82,7 @@ static void histogram(uint8_t* input, Symbol* sym, uint32_t size)
 	} while (swaps);
 }
 
-static void makeTree(Symbol* sym, BitStream* stream, uint32_t code, uint32_t bits, uint32_t first, uint32_t last)
+static void  makeTree(Symbol* sym, BitStream* stream, uint32_t code, uint32_t bits, uint32_t first, uint32_t last)
 {
 	uint32_t i, size, sizeA, sizeB, lastA, firstB;
 
@@ -139,6 +142,8 @@ static void makeTree(Symbol* sym, BitStream* stream, uint32_t code, uint32_t bit
 	}
 }
 
+static void newMakeTree()
+
 static int Compress(uint8_t* input, uint8_t* output, uint32_t inputSize)
 {
 	Symbol sym[256], temp;
@@ -149,7 +154,12 @@ static int Compress(uint8_t* input, uint8_t* output, uint32_t inputSize)
 		return 0;
 
 	initBitStream(&stream, output);
+
+	// считаем байты
 	histogram(input, sym, inputSize);
+
+	// crate new vector and callculate frequency of each symbol and write result 
+	
 
 	for (lastSymbol = 255; sym[lastSymbol].Count == 0; --lastSymbol);
 
@@ -158,6 +168,7 @@ static int Compress(uint8_t* input, uint8_t* output, uint32_t inputSize)
 
 	makeTree(sym, &stream, 0, 0, 0, lastSymbol);
 
+	
 	do
 	{
 		swaps = 0;
@@ -180,12 +191,7 @@ static int Compress(uint8_t* input, uint8_t* output, uint32_t inputSize)
 		writeBits(&stream, sym[symbol].Code, sym[symbol].Bits);
 	}
 
-	totalBytes = (int)(stream.BytePointer - output);
-
-	if (stream.BitPosition > 0)
-	{
-		++totalBytes;
-	}
+	totalBytes = (int)(stream.BytePointer - output) + (stream.BitPosition > 0);
 
 	return totalBytes;
 }
