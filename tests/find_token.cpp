@@ -89,13 +89,13 @@ int make_tree(Symbol* sym, int from, int to, std::string code)
     // }
     int index = split_2_groups(sym, from, to);
 
-    if (index + 1 == to || index == from){ 
+    if (index + 1 == to || index == from) {
         sym[from].MyCode = stoi(code);
         sym[from].StrCode = code;
         //sym[from].Bits = code.length();
         return 0;
     }
-    make_tree(sym, from, index+1, code + "0");
+    make_tree(sym, from, index + 1, code + "0");
     make_tree(sym, index + 1, to, code + "1");
     return 0;
 }

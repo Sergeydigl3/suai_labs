@@ -55,9 +55,9 @@ int split_2_groups(Symbol* sym, int from, int to)
     int sum = 0;
     for (int i = from; i < to; i++) {
         sum += sym[i].Count;
-        cout << sym[i].Count << " ";
+        // cout << sym[i].Count << " ";
     }
-    cout << endl;
+    // cout << endl;
 
     // initialize left and right sums and minimum difference
     int lsum = 0, rsum = sum, diff = INT8_MAX;
@@ -84,19 +84,23 @@ int split_2_groups(Symbol* sym, int from, int to)
 
 int make_tree(Symbol* sym, int from, int to, std::string code)
 {
-    // if(to == from){
-
-    // }
-    int index = split_2_groups(sym, from, to);
-
-    if (index + 1 == to || index == from){ 
-        sym[from].MyCode = stoi(code);
+    if(from+1 == to) {
         sym[from].StrCode = code;
-        //sym[from].Bits = code.length();
+        sym[from].MyCode = stoi(code);
         return 0;
     }
-    make_tree(sym, from, index+1, code + "0");
-    make_tree(sym, index + 1, to, code + "1");
+
+
+    int index = split_2_groups(sym, from, to)+1;
+
+    // if (index + 1 == to || index == from){ 
+    //     sym[from].MyCode = stoi(code);
+    //     sym[from].StrCode = code;
+    //     //sym[from].Bits = code.length();
+    //     return 0;
+    // }
+    make_tree(sym, from, index, code + "0");
+    make_tree(sym, index, to, code + "1");
     return 0;
 }
 
@@ -104,12 +108,12 @@ int make_tree(Symbol* sym, int from, int to, std::string code)
 
 int main(int argc, char const* argv[])
 {
-    int array[8] = { 4, 2, 1, 1 };
-    Symbol sym[8];
+    int array[4] = { 4, 2, 1, 1 };
+    Symbol sym[4];
 
     int array_size = sizeof(array) / sizeof(array[0]);
 
-    int start = 6;
+    int start = 0;
     int end = array_size - start;
 
     //fill array sym with array data to Count and set other to 0
@@ -125,7 +129,28 @@ int main(int argc, char const* argv[])
 
 
 
-
+    // print all str codes
+    for (int i = 0; i < array_size; i++) {
+        cout << sym[i].StrCode << " " << endl;
+    }
 
     return 0;
 }
+
+// int main(int argc, char const *argv[])
+// {
+//     Symbol sym[8];
+//     int array[8] = { 4, 2, 1, 1,1,1,1,1 };
+
+//     //fill array sym with 0, except Count from array;
+//     for (int i = 0; i < 8; i++) {
+//         sym[i].Symbol = i;
+//         sym[i].Count = array[i];
+//         sym[i].Code = 0;
+//         sym[i].MyCode = 0;
+//         sym[i].Bits = 0;
+//     }
+
+
+//     return 0;
+// }
