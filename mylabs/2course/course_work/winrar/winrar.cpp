@@ -95,13 +95,39 @@ int make_tree(Symbol* sym, int from, int to, std::string code)
     return 0;
 }
 
-static void initBitStream(BitStream* stream, uint8_t* buffer)
+size_t initBitStream(BitStream* stream, Symbol* sym)
 {
-	stream->BytePointer = buffer;
+    size_t size = 0;
+    for (int i = 0; i < 256; i++)
+        size += sym[i].Count * sym[i].Bits;
+    size = size / 8 + 1;
+	stream->BytePointer = new uint8_t[size];
 	stream->BitPosition = 0;
 }
 
-static int P_Compress(uint8_t* input, uint8_t* output, uint32_t inputSize)
+static void writeBits(BitStream* stream, uint32_t x, uint32_t bits)
+{
+	uint8_t* buffer = stream->BytePointer;
+	uint32_t bit = stream->BitPosition;
+	uint32_t mask = 1 << (bits - 1);
+
+	for (uint32_t count = 0; count < bits; ++count)
+	{
+		*buffer = (*buffer & (0xff ^ (1 << (7 - bit)))) + ((x & mask ? 1 : 0) << (7 - bit));
+		x <<= 1;
+		bit = (bit + 1) & 7;
+
+		if (!bit)
+		{
+			++buffer;
+		}
+	}
+
+	stream->BytePointer = buffer;
+	stream->BitPosition = bit;
+}
+
+static size_t P_Compress(uint8_t* input, uint32_t inputSize)
 {
 	Symbol sym[256], temp;
 	BitStream stream;
@@ -110,10 +136,13 @@ static int P_Compress(uint8_t* input, uint8_t* output, uint32_t inputSize)
 	if (inputSize < 1)
 		return 0;
 
-	initBitStream(&stream, output);
+
 
 	// считаем байты
 	histogram(input, sym, inputSize);
+    
+    
+    size_t compressedDataSize = initBitStream(&stream, sym);
 
 	// crate new vector and callculate frequency of each symbol and write result 
 	
@@ -126,34 +155,34 @@ static int P_Compress(uint8_t* input, uint8_t* output, uint32_t inputSize)
 	make_tree(sym, 0, lastSymbol, "");
 
 	
-	// do
-	// {
-	// 	swaps = 0;
+	do
+	{
+		swaps = 0;
 
-	// 	for (i = 0; i < 255; ++i)
-	// 	{
-	// 		if (sym[i].Symbol > sym[i + 1].Symbol)
-	// 		{
-	// 			temp = sym[i];
-	// 			sym[i] = sym[i + 1];
-	// 			sym[i + 1] = temp;
-	// 			swaps = 1;
-	// 		}
-	// 	}
-	// } while (swaps);
+		for (i = 0; i < 255; ++i)
+		{
+			if (sym[i].Symbol > sym[i + 1].Symbol)
+			{
+				temp = sym[i];
+				sym[i] = sym[i + 1];
+				sym[i + 1] = temp;
+				swaps = 1;
+			}
+		}
+	} while (swaps);
 
-	// for (i = 0; i < inputSize; ++i)
-	// {
-	// 	symbol = input[i];
-	// 	writeBits(&stream, sym[symbol].Code, sym[symbol].Bits);
-	// }
+	for (i = 0; i < inputSize; ++i)
+	{
+		symbol = input[i];
+		writeBits(&stream, sym[symbol].Code, sym[symbol].Bits);
+	}
 
-	totalBytes = (int)(stream.BytePointer - output) + (stream.BitPosition > 0);
-
+	// totalBytes = (int)(stream.BytePointer - output) + (stream.BitPosition > 0);
+    totalBytes = 15;
 	return totalBytes;
 }
 
-int winrar::compress(std::string& filename)
+int winrar::compress(std::string& filename, std::string& filename_out)
 {
     std::ifstream f(filename);
     std::string str((std::istreambuf_iterator<char>(f)),
@@ -162,9 +191,29 @@ int winrar::compress(std::string& filename)
     
     uint8_t* originalData = (uint8_t*)str.c_str();
     int originalDataSize = strlen(str.c_str());
-    uint8_t* compressedData = new uint8_t[originalDataSize * (101 / 100) + 384];
     
-    int compressedDataSize = P_Compress(originalData, compressedData, originalDataSize);
+    size_t compressedDataSize = P_Compress(originalData, originalDataSize);
+
+
+
+    FILE* output = fopen(filename_out.c_str(), "wb");
+
+    FileHeader file;
+    file.filetype = 228;
+    file.compress_type = 223;
+    file.original_size = 300;
+    file.compressed_size = 900;
+    file.crc32 = 0x000000FF;
+    file.offset = sizeof(file);
+    for (int i = 0; i < 256; i++)
+        file.codebook[i] = i;
+
+    // write file header to file
+    fwrite(&file, sizeof(file), 1, output);
+    
+    fclose(output);
+
+
     return 0;
 }
 
@@ -173,33 +222,8 @@ int winrar::decompress(std::string& filename)
     return 0;
 }
 
-void winrar::writeBits(BitStream* stream, uint32_t value, uint32_t bits)
-{
-    uint32_t bitMask = 1 << (bits - 1);
 
-    while (bitMask)
-    {
-        if (value & bitMask)
-            *stream->BytePointer |= (1 << stream->BitPosition);
-        else
-            *stream->BytePointer &= ~(1 << stream->BitPosition);
 
-        if (++stream->BitPosition == 8)
-        {
-            stream->BitPosition = 0;
-            ++stream->BytePointer;
-        }
-
-        bitMask >>= 1;
-    }
-}
-
-uint32_t get(FILE* f, uint8_t bytes) {
-    uint32_t temp = 0;
-    for (int i = 0; i < bytes; i++)
-        temp |= getc(f) << (8 * i); // little-endian
-    return temp;
-}
 
 void winrar::read_file_header(std::string filename)
 {

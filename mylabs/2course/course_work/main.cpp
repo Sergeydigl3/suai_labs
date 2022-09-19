@@ -26,7 +26,7 @@ using namespace std;
 int main(int argc, char const *argv[])
 {
     winrar zip7;
-    // zip7.compress("book.txt");
+    zip7.compress("book.txt");
     // zip7.read_file_header("crypt.csd");
     std::string filename = "test2.aboba";
     // zip7.write_file_header(filename);
