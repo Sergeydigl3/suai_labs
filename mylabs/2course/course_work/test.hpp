@@ -23,7 +23,7 @@ static void initBitStream(BitStream* stream, uint8_t* buffer)
 	stream->BitPosition = 0;
 }
 
- split_2_groups(Symbol* sym)
+// split_2_groups(Symbol* sym)
 
 static void writeBits(BitStream* stream, uint32_t x, uint32_t bits)
 {
@@ -142,7 +142,6 @@ static void  makeTree(Symbol* sym, BitStream* stream, uint32_t code, uint32_t bi
 	}
 }
 
-static void newMakeTree()
 
 static int Compress(uint8_t* input, uint8_t* output, uint32_t inputSize)
 {
