@@ -23,14 +23,35 @@ using namespace std;
 //     return 0;
 // }
 
-int main(int argc, char const *argv[])
-{
-    winrar zip7;
-    zip7.compress("book.txt");
+void test_write(){
+    winrar zip7("book.txt");
+    zip7.compress("book.aboba");
     // zip7.read_file_header("crypt.csd");
     std::string filename = "test2.aboba";
     // zip7.write_file_header(filename);
-    zip7.read_file_header(filename);
+    // zip7.read_file_header(filename);
+}
 
-    return 0;
+void test_write2(){
+    winrar zip7("war_and_peace.txt");
+    zip7.compress("war_and_peace.aboba");
+}
+
+void test_read(){
+    winrar zip7("book.aboba");
+    zip7.read_file_header();
+    // zip7.decompress("book2.txt");
+}
+
+void test_read2(){
+    winrar zip7("war_and_peace.aboba");
+    zip7.read_file_header();
+    // zip7.decompress("war_and_peace2.txt");
+}
+
+int main(int argc, char const *argv[])
+{
+    // test_read();
+    // test_write2();
+    test_read2();
 }
