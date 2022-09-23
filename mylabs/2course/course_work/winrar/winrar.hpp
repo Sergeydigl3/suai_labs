@@ -57,11 +57,13 @@ private:
     // void writeBits(BitStream* stream, uint32_t value, uint32_t bits);
     void histogram(uint8_t* input, uint32_t size);
     void restore_order();
+    void sort_codebook_by_code();
     int split_2_groups(int from, int to);
     int make_tree(int from, int to, std::string code);
     void initSymbol();
     // void initBitStream(BitStream* stream);
     size_t compress_p(uint8_t* input, uint32_t inputSize, BitStreamFile& stream);
+    size_t decompress_p(uint8_t* input, uint32_t inputSize, std::ofstream& file);
 public:
     winrar(std::string filename);
     void compress(std::string filenameout);

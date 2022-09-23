@@ -126,6 +126,27 @@ void winrar::restore_order()
     } while (swaps);
 }
 
+void winrar::sort_codebook_by_code(){
+    Symbol temp;
+    int i, swaps;
+
+    do
+    {
+        swaps = 0;
+
+        for (i = 0; i < 255; ++i)
+        {
+            if (sym[i].Code > sym[i + 1].Code)
+            {
+                temp = sym[i];
+                sym[i] = sym[i + 1];
+                sym[i + 1] = temp;
+                swaps = 1;
+            }
+        }
+    } while (swaps);
+}
+
 size_t winrar::compress_p(uint8_t* input, uint32_t inputSize, BitStreamFile& stream)
 {
     // Symbol temp;
@@ -195,56 +216,74 @@ void winrar::compress(std::string filename_out) {
     size_t compressedDataSize = compress_p(data, size, out_file);
 }
 
-// int winrar::compress(std::string filename_out)
-// {
-//     std::ifstream f(filename_out);
-//     std::string str((std::istreambuf_iterator<char>(f)),
-//                   std::istreambuf_iterator<char>());
-//     f.close();
-
-//     uint8_t* originalData = (uint8_t*)str.c_str();
-//     int originalDataSize = strlen(str.c_str());
-
-//     size_t compressedDataSize = compress_p(originalData, originalDataSize);
-
-
-
-//     FILE* output = fopen(filename_out.c_str(), "wb");
-
-//     FileHeader file;
-//     file.filetype = 228;
-//     file.compress_type = 223;
-//     file.original_size = 300;
-//     file.compressed_size = 900;
-//     file.crc32 = 0x000000FF;
-//     file.offset = sizeof(file);
-//     for (int i = 0; i < 256; i++)
-//         file.codebook[i] = i;
-
-//     // write file header to file
-//     fwrite(&file, sizeof(file), 1, output);
-
-
-//     fclose(output);
-
-
-//     return 0;
-// }
-
 void winrar::decompress(std::string filename_out)
 {
+    std::ifstream file(filepath, std::ios::binary);
+    std::ofstream out_file(filename_out, std::ios::binary);
 
+    if (!file.is_open() ) {
+        std::cout << "Error: input file not found" << std::endl;
+        return;
+    }
+    if (!out_file.is_open()) {
+        std::cout << "Error: output file not found" << std::endl;
+        return;
+    }
+
+    // read file header
+    file.read((char*)&file_head, sizeof(file_head));
+
+    // read codebook from file_head
+    for (int i = 0; i < 256; i++) {
+        sym[i].Code = file_head.codebook[i];
+    }
+
+    // sort codebook by code length
+    sort_codebook_by_code();
+
+    // read compressed data
+    BitStreamFile in_file(filepath);
+    
+    
+    
+    file.close();
+
+    // set file cursor to the file_header offset
+    file.seekg(sizeof(file_head), std::ios::beg);
+    
+
+
+    
+
+    out_file.close();
+}
+
+size_t winrar::decompress_p(uint8_t* input, uint32_t inputSize, std::ofstream& stream)
+{
+    
 }
 
 void winrar::read_file_header()
 {
-    FILE* input = fopen(filepath.c_str(), "rb");
+    std::ifstream file(filepath, std::ios::binary);
 
-    FileHeader file;
+    // FILE* input = fopen(filepath.c_str(), "rb");
 
-    fread(&file, sizeof(file), 1, input);
+    // FileHeader file;
 
-    std::cout << file;
+    if (!file.is_open()) {
+        std::cout << "Error: file not found" << std::endl;
+        return;
+    }
+    // file.seekg(0, std::ios::end);
+    // size_t size = file.tellg();
+    // file.seekg(0, std::ios::beg);
+
+
+    file.read((char*)&file_head, sizeof(file_head));
+    // fread(&file, sizeof(file), 1, input);
+
+    std::cout << file_head;
 }
 
 void winrar::write_file_header(std::string filename)

@@ -41,6 +41,7 @@ void test_read(){
     winrar zip7("book.aboba");
     zip7.read_file_header();
     // zip7.decompress("book2.txt");
+    return;
 }
 
 void test_read2(){
@@ -51,7 +52,8 @@ void test_read2(){
 
 int main(int argc, char const *argv[])
 {
-    // test_read();
+    test_read();
+    // test_write();
     // test_write2();
-    test_read2();
+    // test_read2();
 }
