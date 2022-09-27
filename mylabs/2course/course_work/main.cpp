@@ -7,9 +7,6 @@
 using namespace std;
 
 
-
-
-
 void test_write(){
     winrar zip7("book.txt");
     zip7.compress("book.aboba");
@@ -33,8 +30,8 @@ void test_read(){
 
 void test_read2(){
     winrar zip7("war_and_peace.aboba");
-    zip7.read_file_header();
-    // zip7.decompress("war_and_peace2.txt");
+    // zip7.read_file_header();
+    zip7.decompress("war_and_peace2.txt");
 }
 
 void test_write5(){
@@ -48,9 +45,41 @@ void test_read5(){
     zip7.decompress("kniga2.txt");
 }
 
+void test_write6(){
+    winrar zip7("mif.jpg");
+    zip7.compress("mif.aboba");
+}
+
+void test_read6(){
+    winrar zip7("mif.aboba");
+    // zip7.read_file_header();
+    zip7.decompress("mif2.jpg");
+}
+
+void test_write7(){
+    winrar zip7("kruk.jpg");
+    zip7.compress("kruk.aboba");
+    return;
+}
+
+void test_read7(){
+    winrar zip7("kruk.aboba");
+    // zip7.read_file_header();
+    zip7.decompress("kruk2.jpg");
+}
+
 int main(int argc, char const *argv[])
 {
     // test_write();
     // test_write2();
     // test_read2();
+
+    // test_write5();
+    // test_read5();
+
+    test_write6();
+    test_read6();
+
+    // test_write7();
+    // test_read7();
 }

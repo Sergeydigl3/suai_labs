@@ -164,7 +164,7 @@ void winrar::sort_codebook_by_code(){
     } while (swaps);
 }
 
-size_t winrar::compress_p(uint8_t* input, uint32_t inputSize, BitStreamFile& stream)
+uint64_t winrar::compress_p(uint8_t* input, uint64_t inputSize, BitStreamFile& stream)
 {
     // Symbol temp;
     uint32_t i, symbol;
@@ -182,7 +182,7 @@ size_t winrar::compress_p(uint8_t* input, uint32_t inputSize, BitStreamFile& str
     file_head.original_size = inputSize;
     file_head.compressed_size = sizeof(file_head);
     file_head.codebook_elements = lastSymbol + 1; 
-    size_t temp_size = sizeof(file_head);
+    uint64_t temp_size = sizeof(file_head);
 
     
     file_head.compressed_size += temp_size/8;
@@ -191,15 +191,22 @@ size_t winrar::compress_p(uint8_t* input, uint32_t inputSize, BitStreamFile& str
 
     uint8_t byte_temp = 0;
 
+    uint8_t max_bits = 0;
     for (i = 0; i < file_head.codebook_elements; i++) {
         // calculate bits to byte degree 2
         
         stream.write((char*)&sym[i].Symbol, sizeof(sym[i].Symbol), 1);
         stream.write((char*)&sym[i].Bits, sizeof(sym[i].Bits), 1);
         stream.write((char*)&sym[i].Code, (sym[i].Bits+7)/8, 1);
-
         cout << "Symbol: " << sym[i].Symbol << " Bits: " << static_cast<unsigned>(sym[i].Bits) << " Bytes: "<< static_cast<unsigned>((sym[i].Bits+7)/8)<<" Code: " << sym[i].StrCode << endl;
+
+        if (sym[i].Bits > max_bits)
+            max_bits = sym[i].Bits;
         file_head.compressed_size += sizeof(sym[i].Symbol) + sizeof(sym[i].Count) + (sym[i].Bits+7)/8;
+    }
+    if (max_bits > sizeof(uint64_t)*8) {
+        cout << "Error: max_bits > sizeof(uint64_t)*8" << endl;
+        return 0;
     }
 
     restore_order();
@@ -209,7 +216,7 @@ size_t winrar::compress_p(uint8_t* input, uint32_t inputSize, BitStreamFile& str
     {
         symbol = input[i];
         stream.writeBits(sym[symbol].Code, sym[symbol].Bits);
-        cout << sym[symbol].StrCode << " ";
+        // cout << sym[symbol].StrCode << " ";
     }
     cout << "\nCalculated compressed size: " << file_head.compressed_size << endl;
     cout << "Stream size: " << stream.getSize() << endl;
@@ -226,7 +233,7 @@ void winrar::compress(std::string filename_out) {
         return;
     }
     file.seekg(0, std::ios::end);
-    size_t size = file.tellg();
+    uint64_t size = file.tellg();
     file.seekg(0, std::ios::beg);
 
     uint8_t* data = new uint8_t[size];
@@ -235,7 +242,7 @@ void winrar::compress(std::string filename_out) {
 
     initSymbol();
 
-    size_t compressedDataSize = compress_p(data, size, out_file);
+    uint64_t compressedDataSize = compress_p(data, size, out_file);
 }
 
 void winrar::decompress(std::string filename_out)
@@ -292,8 +299,10 @@ void winrar::decompress(std::string filename_out)
                 file.seekBits(sym[j].Bits);
                 break;
             }
+            
         }
-
+        // cerr << "Error: code not found" << endl;
+        // break;
 
     }
 
@@ -302,26 +311,20 @@ void winrar::decompress(std::string filename_out)
     out_file.close();
 }
 
-size_t winrar::decompress_p(uint8_t* input, uint32_t inputSize, std::ofstream& stream)
-{
-    return 0;
-}
+// uint64_t winrar::decompress_p(uint8_t* input, uint32_t inputSize, std::ofstream& stream)
+// {
+//     return 0;
+// }
 
 void winrar::read_file_header()
 {
     std::ifstream file(filepath, std::ios::binary);
 
-    // FILE* input = fopen(filepath.c_str(), "rb");
-
-    // FileHeader file;
-
     if (!file.is_open()) {
         std::cout << "Error: file not found" << std::endl;
         return;
     }
-    // file.seekg(0, std::ios::end);
-    // size_t size = file.tellg();
-    // file.seekg(0, std::ios::beg);
+
 
     initSymbol();
 
@@ -338,7 +341,7 @@ void winrar::read_file_header()
 
 
         file.read((char*)&sym[symbol].Code, (sym[symbol].Bits+7)/8);
-        // cout << "Symbol: " << symbol << " Bits: " << static_cast<unsigned>(bits) << " Bytes: "<< static_cast<unsigned>((sym[symbol].Bits+7)/8)<<" Code: " << sym[symbol].Code << endl;
+        cout << "Symbol: " << symbol << " Bits: " << static_cast<unsigned>(bits) << " Bytes: "<< static_cast<unsigned>((sym[symbol].Bits+7)/8)<<" Code: " << sym[symbol].Code << endl;
     }
 
     std::cout << file_head;

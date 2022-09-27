@@ -12,7 +12,7 @@ struct FileHeader {
     uint32_t original_size;
     uint32_t compressed_size;
     uint32_t crc32 = 0x000000FF;
-    uint8_t codebook_elements;
+    uint16_t codebook_elements;
     uint32_t offset = sizeof(FileHeader);
 
     friend std::ostream& operator<<(std::ostream& os, const FileHeader& file) {
@@ -49,8 +49,8 @@ private:
     FileHeader file_head;
     Symbol sym[256];
     std::string filepath;
-    size_t codes_count;
-    size_t byteSize;
+    uint64_t codes_count;
+    uint64_t byteSize;
     uint32_t lastSymbol = 255;
     void histogram(uint8_t* input, uint32_t size);
     void restore_order();
@@ -59,8 +59,8 @@ private:
     int make_tree(int from, int to, std::string code);
     void initSymbol();
     // void initBitStream(BitStream* stream);
-    size_t compress_p(uint8_t* input, uint32_t inputSize, BitStreamFile& stream);
-    size_t decompress_p(uint8_t* input, uint32_t inputSize, std::ofstream& file);
+    uint64_t compress_p(uint8_t* input, uint64_t inputSize, BitStreamFile& stream);
+    // uint64_t decompress_p(uint8_t* input, uint64_t inputSize, std::ofstream& file);
 public:
     winrar(std::string filename);
     void compress(std::string filenameout);
