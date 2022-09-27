@@ -8,20 +8,7 @@ using namespace std;
 
 
 
-// int main(int argc, char const* argv[])
-// {
-//     ifstream f("book.txt");
-//     std::string str((std::istreambuf_iterator<char>(f)),
-//                   std::istreambuf_iterator<char>());
-//     f.close();
-    
-//     uint8_t* originalData = (uint8_t*)str.c_str();
-//     int originalDataSize = strlen(str.c_str());
-//     uint8_t* compressedData = new uint8_t[originalDataSize * (101 / 100) + 384];
-    
-//     int compressedDataSize = Compress(originalData, compressedData, originalDataSize);
-//     return 0;
-// }
+
 
 void test_write(){
     winrar zip7("book.txt");
@@ -50,9 +37,19 @@ void test_read2(){
     // zip7.decompress("war_and_peace2.txt");
 }
 
+void test_write5(){
+    winrar zip7("kniga.txt");
+    zip7.compress("kniga.aboba");
+}
+
+void test_read5(){
+    winrar zip7("kniga.aboba");
+    // zip7.read_file_header();
+    zip7.decompress("kniga2.txt");
+}
+
 int main(int argc, char const *argv[])
 {
-    test_read();
     // test_write();
     // test_write2();
     // test_read2();

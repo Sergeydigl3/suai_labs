@@ -12,7 +12,7 @@ struct FileHeader {
     uint32_t original_size;
     uint32_t compressed_size;
     uint32_t crc32 = 0x000000FF;
-    uint32_t codebook[256];
+    uint8_t codebook_elements;
     uint32_t offset = sizeof(FileHeader);
 
     friend std::ostream& operator<<(std::ostream& os, const FileHeader& file) {
@@ -23,9 +23,8 @@ struct FileHeader {
         os << "crc32: " << file.crc32 << std::endl;
         os << "offset: " << file.offset << std::endl;
         os << "filename: " << file.filename << std::endl;
-        os << "codebook: " << std::endl;
-        for (int i = 0; i < 256; i++)
-            os << file.codebook[i] << " ";
+        // os << "codebook: " << std::endl;
+        os << "codebook_elements: " << (int)file.codebook_elements << std::endl;
         os << std::endl;
         return os;
     }
@@ -37,11 +36,11 @@ typedef struct {
 } BitStream;
 
 typedef struct {
-	uint32_t Symbol;
+	uint8_t Symbol;
 	uint64_t Count;
-	uint32_t Code;
+	uint64_t Code;
     std::string StrCode;
-	uint32_t Bits;
+	uint8_t Bits;
 } Symbol;
 
 class winrar
@@ -53,8 +52,6 @@ private:
     size_t codes_count;
     size_t byteSize;
     uint32_t lastSymbol = 255;
-    // int split_2_groups(int from, int to);
-    // void writeBits(BitStream* stream, uint32_t value, uint32_t bits);
     void histogram(uint8_t* input, uint32_t size);
     void restore_order();
     void sort_codebook_by_code();
@@ -68,7 +65,6 @@ public:
     winrar(std::string filename);
     void compress(std::string filenameout);
     void decompress(std::string filenameout);
-
     void read_file_header();
     void write_file_header(std::string filename);
 };

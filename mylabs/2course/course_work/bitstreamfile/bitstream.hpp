@@ -15,13 +15,13 @@ private:
     size_t size;
     
 public:
-    void writeBits(uint32_t value, uint32_t bits);
+    void writeBits(uint64_t value, uint32_t bits);
     void writeByte(uint8_t value);
     void writeInt(uint32_t value);
 
 
     void write(void* ptr, size_t size, size_t count);
-    uint32_t readBits(uint32_t bits);
+    // uint64_t readBits(uint32_t bits);
 
     size_t getSize();
 
@@ -41,13 +41,13 @@ private:
     size_t size;
 
 public:
-    uint32_t readBits(uint32_t bits);
+    uint64_t readBits(uint32_t bits);
     void seekBits(uint32_t bits);
     uint8_t readByte();
     uint32_t readInt();
-    void read(void* ptr, size_t size, size_t count);
+    void read(void* ptr, size_t size, size_t count = 1);
     size_t getSize();
-
+    bool eof();
     BitStreamFileR(std::string filename);
     ~BitStreamFileR();
 };

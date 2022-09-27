@@ -16,10 +16,10 @@ BitStreamFile::~BitStreamFile() {
     file.close();
 }
 
-void BitStreamFile::writeBits(uint32_t value, uint32_t bits) {
-    uint32_t i;
+void BitStreamFile::writeBits(uint64_t value, uint32_t bits) {
+    uint64_t i;
     for (i = 0; i < bits; ++i) {
-        temp |= ((value >> i) & 1) << bitPosition;
+        temp |= ((value >> (bits-i-1)) & 1) << (7-bitPosition);
         ++bitPosition;
         if (bitPosition == 8) {
             file.write((char*)&temp, 1);
@@ -51,6 +51,14 @@ size_t BitStreamFile::getSize() {
 
 BitStreamFileR::BitStreamFileR(std::string filename) {
     file.open(filename, ios::binary);
+    if (!file.is_open() ) {
+        std::cout << "Error: input file not found" << std::endl;
+        return;
+    }
+    if (!file.is_open()) {
+        std::cout << "Error: output file not found" << std::endl;
+        return;
+    }
     temp = 0;
     bitPosition = 0;
     size = 0;
@@ -61,24 +69,27 @@ BitStreamFileR::~BitStreamFileR() {
 }
 
 // readBits function for reading bits from file, with saving starting place
-uint32_t BitStreamFileR::readBits(uint32_t bits) {
+uint64_t BitStreamFileR::readBits(uint32_t bits) {
     uint32_t i;
-    uint32_t value = 0;
+    uint64_t value = 0;
+    uint8_t temp2 = temp;
     // save current position in file
     streampos pos = file.tellg();
-
+    uint8_t tBitPosition = bitPosition;
     for (i = 0; i < bits; ++i) {
         if (bitPosition == 0) {
             file.read((char*)&temp, 1);
         }
-        value |= ((temp >> bitPosition) & 1) << i;
+        value |= ((temp >> (7-bitPosition)) & 1) << (bits-i-1);
         ++bitPosition;
         if (bitPosition == 8) {
             bitPosition = 0;
         }
     }
     // return to starting position
-    file.seekg(pos); 
+    file.seekg(pos);
+    bitPosition = tBitPosition;
+    temp = temp2;
     return value;
 }
 
@@ -88,7 +99,7 @@ void BitStreamFileR::seekBits(uint32_t bits) {
     for (i = 0; i < bits; ++i) {
         if (bitPosition == 0) {
             file.read((char*)&temp, 1);
-        }
+    }
         ++bitPosition;
         if (bitPosition == 8) {
             bitPosition = 0;
@@ -96,9 +107,15 @@ void BitStreamFileR::seekBits(uint32_t bits) {
     }
 }
 
+// read byte with bitPosition
 uint8_t BitStreamFileR::readByte() {
     uint8_t value;
-    file.read((char*)&value, 1);
+    if (bitPosition == 0) {
+        file.read((char*)&value, 1);
+    }
+    else {
+        value = readBits(8);
+    }
     return value;
 }
 
@@ -114,4 +131,8 @@ void BitStreamFileR::read(void* ptr, size_t size, size_t count) {
 
 size_t BitStreamFileR::getSize() {
     return size;
+}
+
+bool BitStreamFileR::eof() {
+    return file.eof();
 }
