@@ -5,6 +5,9 @@
 #include <cstdlib>
 #include <bitset>
 
+// https://gitlab.com/miguelraggi/tqdm-cpp
+#include "../tqdm/tqdm.h"
+
 winrar::winrar(std::string filename) {
     filepath = filename;
 }
@@ -283,6 +286,27 @@ void winrar::decompress(std::string filename_out)
 
     // cout << bitset <8> (file.readBits(8)) << endl;
 
+    for (int i : tq::trange(file_head.original_size)) {
+        if (file.eof()) {
+            cout << "End of file" << endl;
+            break;
+        }
+        
+        for (int j = 0; j < file_head.codebook_elements; j++) {
+            if (sym[j].Bits == 0) {
+                continue;
+            }
+            uint64_t code = file.readBits(sym[j].Bits);
+            if (code == sym[j].Code) {
+                out_file.write((char*)&sym[j].Symbol, 1);
+                file.seekBits(sym[j].Bits);
+                break;
+            }
+            
+        }
+    }
+
+    /* orig
     for (int i = 0; i < file_head.original_size; i++) {
         if (file.eof()) {
             cout << "End of file" << endl;
@@ -303,8 +327,8 @@ void winrar::decompress(std::string filename_out)
         }
         // cerr << "Error: code not found" << endl;
         // break;
-
     }
+    */
 
     
 
