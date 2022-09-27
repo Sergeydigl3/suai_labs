@@ -71,23 +71,12 @@ void bmp_read(){
     zip7.decompress("/config/workspace/suai_labs/mylabs/2course/course_work/test_data/bmp/sample2.bmp");
 }
 
+void xxx_read(){
+    winrar zip7("video.aboba");
+    zip7.decompress("xxx.mp4");
+}
+
 int main(int argc, char const *argv[])
 {
-    // war_write();
-    // war_read();
-    // test_write();
-    // test_write2();
-    // test_read2();
-
-    // test_write5();
-    // test_read5();
-
-    // test_write6();
-    // test_read6();
-
-    // test_write7();
-    // test_read7();
-
-    bmp_write();
-    bmp_read();
+    xxx_read();
 }
