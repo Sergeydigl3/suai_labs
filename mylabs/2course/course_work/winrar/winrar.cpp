@@ -6,7 +6,7 @@
 #include <bitset>
 
 // https://gitlab.com/miguelraggi/tqdm-cpp
-#include "../tqdm/tqdm.h"
+#include "../tqdm/tqdm.hpp"
 
 winrar::winrar(std::string filename) {
     filepath = filename;
@@ -286,7 +286,7 @@ void winrar::decompress(std::string filename_out)
 
     // cout << bitset <8> (file.readBits(8)) << endl;
 
-    for (int i : tq::trange(file_head.original_size)) {
+    for (int i : tqdm::range(file_head.original_size)) {
         if (file.eof()) {
             cout << "End of file" << endl;
             break;
