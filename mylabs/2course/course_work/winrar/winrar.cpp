@@ -5,8 +5,8 @@
 #include <cstdlib>
 #include <bitset>
 
-// https://gitlab.com/miguelraggi/tqdm-cpp
-#include "../tqdm/tqdm.hpp"
+#include "../indicators/indicators.hpp"
+using namespace indicators;
 
 winrar::winrar(std::string filename) {
     filepath = filename;
@@ -85,7 +85,7 @@ int winrar::split_2_groups(int from, int to)
     return min_index;
 }
 
-int winrar:: make_tree(int from, int to, std::string code)
+int winrar::make_tree(int from, int to, std::string code)
 {
     if (from + 1 == to) {
         // convert string of binary code to int
@@ -130,7 +130,7 @@ void winrar::restore_order()
     } while (swaps);
 }
 
-void winrar::sort_codebook_by_code(){
+void winrar::sort_codebook_by_code() {
     Symbol temp;
     int i, swaps;
 
@@ -154,7 +154,7 @@ void winrar::sort_codebook_by_code(){
     {
         swaps = 0;
 
-        for (i = 0; i < file_head.codebook_elements-1; ++i)
+        for (i = 0; i < file_head.codebook_elements - 1; ++i)
         {
             if (sym[i].Code > sym[i + 1].Code)
             {
@@ -180,15 +180,15 @@ uint64_t winrar::compress_p(uint8_t* input, uint64_t inputSize, BitStreamFile& s
     // считаем байты
     histogram(input, inputSize);
 
-    make_tree(0, lastSymbol+1, "");
+    make_tree(0, lastSymbol + 1, "");
 
     file_head.original_size = inputSize;
     file_head.compressed_size = sizeof(file_head);
-    file_head.codebook_elements = lastSymbol + 1; 
+    file_head.codebook_elements = lastSymbol + 1;
     uint64_t temp_size = sizeof(file_head);
 
-    
-    file_head.compressed_size += temp_size/8;
+
+    file_head.compressed_size += temp_size / 8;
 
     stream.write((char*)&file_head, sizeof(file_head), 1);
 
@@ -197,17 +197,17 @@ uint64_t winrar::compress_p(uint8_t* input, uint64_t inputSize, BitStreamFile& s
     uint8_t max_bits = 0;
     for (i = 0; i < file_head.codebook_elements; i++) {
         // calculate bits to byte degree 2
-        
+
         stream.write((char*)&sym[i].Symbol, sizeof(sym[i].Symbol), 1);
         stream.write((char*)&sym[i].Bits, sizeof(sym[i].Bits), 1);
-        stream.write((char*)&sym[i].Code, (sym[i].Bits+7)/8, 1);
-        cout << "Symbol: " << sym[i].Symbol << " Bits: " << static_cast<unsigned>(sym[i].Bits) << " Bytes: "<< static_cast<unsigned>((sym[i].Bits+7)/8)<<" Code: " << sym[i].StrCode << endl;
+        stream.write((char*)&sym[i].Code, (sym[i].Bits + 7) / 8, 1);
+        cout << "Symbol: " << sym[i].Symbol << " Bits: " << static_cast<unsigned>(sym[i].Bits) << " Bytes: " << static_cast<unsigned>((sym[i].Bits + 7) / 8) << " Code: " << sym[i].StrCode << endl;
 
         if (sym[i].Bits > max_bits)
             max_bits = sym[i].Bits;
-        file_head.compressed_size += sizeof(sym[i].Symbol) + sizeof(sym[i].Count) + (sym[i].Bits+7)/8;
+        file_head.compressed_size += sizeof(sym[i].Symbol) + sizeof(sym[i].Count) + (sym[i].Bits + 7) / 8;
     }
-    if (max_bits > sizeof(uint64_t)*8) {
+    if (max_bits > sizeof(uint64_t) * 8) {
         cout << "Error: max_bits > sizeof(uint64_t)*8" << endl;
         return 0;
     }
@@ -224,7 +224,7 @@ uint64_t winrar::compress_p(uint8_t* input, uint64_t inputSize, BitStreamFile& s
     cout << "\nCalculated compressed size: " << file_head.compressed_size << endl;
     cout << "Stream size: " << stream.getSize() << endl;
     cout << "Original size: " << file_head.original_size << endl;
-    cout << "Compression ratio: " << (double)file_head.compressed_size/file_head.original_size << endl;
+    cout << "Compression ratio: " << (double)file_head.compressed_size / file_head.original_size << endl;
     return stream.getSize();
 }
 
@@ -253,10 +253,10 @@ void winrar::decompress(std::string filename_out)
     BitStreamFileR file(filepath);
     std::ofstream out_file(filename_out, std::ios::binary);
 
-    
+
     // read file header
     file.read((char*)&file_head, sizeof(file_head));
-    
+
     initSymbol();
     // read codebook from file_head
     for (int i = 0; i < file_head.codebook_elements; i++) {
@@ -268,13 +268,13 @@ void winrar::decompress(std::string filename_out)
         sym[symbol].Bits = bits;
 
 
-        file.read((char*)&sym[symbol].Code, (sym[symbol].Bits+7)/8);
-        cout << "Symbol: " << symbol << " Bits: " << static_cast<unsigned>(bits) << " Bytes: "<< static_cast<unsigned>((sym[symbol].Bits+7)/8)<<" Code: " << sym[symbol].Code << endl;
+        file.read((char*)&sym[symbol].Code, (sym[symbol].Bits + 7) / 8);
+        cout << "Symbol: " << symbol << " Bits: " << static_cast<unsigned>(bits) << " Bytes: " << static_cast<unsigned>((sym[symbol].Bits + 7) / 8) << " Code: " << sym[symbol].Code << endl;
     }
 
     sort_codebook_by_code();
-    
-    
+
+
     // file.readBits(8) to cout binary
     // cout << bitset <8> (file.readBits(8)) << endl;
     // cout << bitset <3> (file.readBits(3)) << endl;
@@ -286,12 +286,30 @@ void winrar::decompress(std::string filename_out)
 
     // cout << bitset <8> (file.readBits(8)) << endl;
 
-    for (int i : tqdm::range(file_head.original_size)) {
+    show_console_cursor(false);
+
+
+    indicators::BlockProgressBar bar{
+        option::BarWidth{80},
+        option::PrefixText{"Decompressing file "},
+        option::ForegroundColor{Color::yellow},
+        option::ShowElapsedTime{true},
+        option::ShowRemainingTime{true},
+        option::FontStyles{
+        std::vector<FontStyle>{FontStyle::bold}},
+        option::MaxProgress{file_head.original_size}
+    };
+
+    for (uint64_t i = 0; i < file_head.original_size; i++) {
+        bar.set_option(option::PostfixText{
+            std::to_string(i) + "/" + std::to_string(file_head.original_size)
+            });
+        bar.tick();
         if (file.eof()) {
             cout << "End of file" << endl;
             break;
         }
-        
+
         for (int j = 0; j < file_head.codebook_elements; j++) {
             if (sym[j].Bits == 0) {
                 continue;
@@ -302,35 +320,12 @@ void winrar::decompress(std::string filename_out)
                 file.seekBits(sym[j].Bits);
                 break;
             }
-            
+
         }
     }
 
-    /* orig
-    for (int i = 0; i < file_head.original_size; i++) {
-        if (file.eof()) {
-            cout << "End of file" << endl;
-            break;
-        }
-        
-        for (int j = 0; j < file_head.codebook_elements; j++) {
-            if (sym[j].Bits == 0) {
-                continue;
-            }
-            uint64_t code = file.readBits(sym[j].Bits);
-            if (code == sym[j].Code) {
-                out_file.write((char*)&sym[j].Symbol, 1);
-                file.seekBits(sym[j].Bits);
-                break;
-            }
-            
-        }
-        // cerr << "Error: code not found" << endl;
-        // break;
-    }
-    */
-
-    
+    bar.mark_as_completed();
+    show_console_cursor(true);
 
     out_file.close();
 }
@@ -364,8 +359,8 @@ void winrar::read_file_header()
         sym[symbol].Bits = bits;
 
 
-        file.read((char*)&sym[symbol].Code, (sym[symbol].Bits+7)/8);
-        cout << "Symbol: " << symbol << " Bits: " << static_cast<unsigned>(bits) << " Bytes: "<< static_cast<unsigned>((sym[symbol].Bits+7)/8)<<" Code: " << sym[symbol].Code << endl;
+        file.read((char*)&sym[symbol].Code, (sym[symbol].Bits + 7) / 8);
+        cout << "Symbol: " << symbol << " Bits: " << static_cast<unsigned>(bits) << " Bytes: " << static_cast<unsigned>((sym[symbol].Bits + 7) / 8) << " Code: " << sym[symbol].Code << endl;
     }
 
     std::cout << file_head;
