@@ -1,9 +1,10 @@
 // class for compressing and decompressing files
 #pragma once
-#include "../bitstreamfile/bitstream.hpp"
+#include "../bitstreamfilev2/bitstream.hpp"
 #include <iostream>
 #include <cstring>
 #include <cstdint>
+#include <vector>
 
 struct FileHeader {
     uint32_t filetype = 228;
@@ -52,15 +53,16 @@ private:
     uint64_t codes_count;
     uint64_t byteSize;
     uint32_t lastSymbol = 255;
+
+    std::vector<std::vector<Symbol>> codebook_optimized;
     void histogram(uint8_t* input, uint32_t size);
     void restore_order();
     void sort_codebook_by_code();
+    int codebook_optimize();
     int split_2_groups(int from, int to);
     int make_tree(int from, int to, std::string code);
     void initSymbol();
-    // void initBitStream(BitStream* stream);
     uint64_t compress_p(uint8_t* input, uint64_t inputSize, BitStreamFile& stream);
-    // uint64_t decompress_p(uint8_t* input, uint64_t inputSize, std::ofstream& file);
 public:
     winrar(std::string filename);
     void compress(std::string filenameout);

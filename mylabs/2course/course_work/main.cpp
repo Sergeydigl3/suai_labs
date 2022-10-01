@@ -28,14 +28,14 @@ void war_read(){
 }
 
 void test_write5(){
-    winrar zip7("kniga.txt");
-    zip7.compress("kniga.aboba");
+    winrar zip7("/config/workspace/suai_labs/mylabs/2course/course_work/test_data/kniga/kniga.txt");
+    zip7.compress("/config/workspace/suai_labs/mylabs/2course/course_work/test_data/kniga/kniga.aboba");
 }
 
 void test_read5(){
-    winrar zip7("kniga.aboba");
+    winrar zip7("/config/workspace/suai_labs/mylabs/2course/course_work/test_data/kniga/kniga.aboba");
     // zip7.read_file_header();
-    zip7.decompress("kniga2.txt");
+    zip7.decompress("/config/workspace/suai_labs/mylabs/2course/course_work/test_data/kniga/kniga2.txt");
 }
 
 void test_write6(){
@@ -76,7 +76,25 @@ void xxx_read(){
     zip7.decompress("xxx.mp4");
 }
 
+void text_write(){
+    winrar zip7("/config/workspace/suai_labs/mylabs/2course/course_work/test_data/small_text/text.txt");
+    zip7.compress("/config/workspace/suai_labs/mylabs/2course/course_work/test_data/small_text/text.aboba");
+}
+
+void text_read(){
+    winrar zip7("/config/workspace/suai_labs/mylabs/2course/course_work/test_data/small_text/text.aboba");
+    zip7.decompress("/config/workspace/suai_labs/mylabs/2course/course_work/test_data/small_text/text2.txt");
+}
+
 int main(int argc, char const *argv[])
-{
-    xxx_read();
+{   
+    // bmp_write();
+    // bmp_read();
+    // xxx_read();
+    // text_write();
+    // text_read();
+    
+    // test_write5();
+    test_read5();
+
 }

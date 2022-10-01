@@ -1,4 +1,4 @@
-#include "../bitstreamfile/bitstream.hpp"
+#include "../bitstreamfilev2/bitstream.hpp"
 #include "winrar.hpp"
 #include <fstream>
 #include <iostream>
@@ -167,6 +167,31 @@ void winrar::sort_codebook_by_code() {
     } while (swaps);
 }
 
+// codebook_optimize function push all Symbols to codebook_optimized array by bits
+int winrar::codebook_optimize() {
+    // find max bits
+    int max_bits = 0;
+    for (int i = 0; i < file_head.codebook_elements; i++) {
+        if (sym[i].Bits > max_bits) {
+            max_bits = sym[i].Bits;
+        }
+    }
+
+    // push all Symbols to codebook_optimized array by bits
+
+    for (int i = 0; i < max_bits + 1; i++) {
+        vector<Symbol> temp;
+        for (int j = 0; j < file_head.codebook_elements; j++) {
+            if (sym[j].Bits == i) {
+                temp.push_back(sym[j]);
+            }
+        }
+        codebook_optimized.push_back(temp);
+    }
+    return max_bits;
+    // file_head.codebook_optimized_elements = j + 1;
+}
+
 uint64_t winrar::compress_p(uint8_t* input, uint64_t inputSize, BitStreamFile& stream)
 {
     // Symbol temp;
@@ -274,23 +299,13 @@ void winrar::decompress(std::string filename_out)
 
     sort_codebook_by_code();
 
-
-    // file.readBits(8) to cout binary
-    // cout << bitset <8> (file.readBits(8)) << endl;
-    // cout << bitset <3> (file.readBits(3)) << endl;
-    // file.seekBits(3);
-    // cout << bitset <3> (file.readBits(3)) << endl;
-    // file.seekBits(3);
-    // cout << bitset <2> (file.readBits(2)) << endl;
-    // file.seekBits(2);
-
-    // cout << bitset <8> (file.readBits(8)) << endl;
+    int max_bits = codebook_optimize();
 
     show_console_cursor(false);
 
 
     indicators::BlockProgressBar bar{
-        option::BarWidth{80},
+        option::BarWidth{50},
         option::PrefixText{"Decompressing file "},
         option::ForegroundColor{Color::yellow},
         option::ShowElapsedTime{true},
@@ -300,28 +315,40 @@ void winrar::decompress(std::string filename_out)
         option::MaxProgress{file_head.original_size}
     };
 
+
     for (uint64_t i = 0; i < file_head.original_size; i++) {
         bar.set_option(option::PostfixText{
             std::to_string(i) + "/" + std::to_string(file_head.original_size)
             });
-        bar.tick();
-        if (file.eof()) {
-            cout << "End of file" << endl;
+
+        // if (file.eof()) {
+        //     cout << "End of file" << endl;
+        //     break;
+        // }
+        uint64_t code = 0;
+        uint64_t count_bits = 0;
+        bool code_found = false;
+        do
+        {
+            code = file.readBit();
+            count_bits++;
+
+            for (int j = 0; j < codebook_optimized[count_bits].size(); j++) {
+                if (codebook_optimized[count_bits][j].Code == code) {
+                    out_file.write((char*)&codebook_optimized[count_bits][j].Symbol, 1);
+                    file.clearTemp();
+                    code_found = true;
+                    count_bits = 0;
+                    break;
+                }
+            }
+        } while (!code_found && count_bits < max_bits);
+        if (!code_found && count_bits == max_bits) {
+            cout << "Error: code not found" << endl;
             break;
         }
 
-        for (int j = 0; j < file_head.codebook_elements; j++) {
-            if (sym[j].Bits == 0) {
-                continue;
-            }
-            uint64_t code = file.readBits(sym[j].Bits);
-            if (code == sym[j].Code) {
-                out_file.write((char*)&sym[j].Symbol, 1);
-                file.seekBits(sym[j].Bits);
-                break;
-            }
-
-        }
+        bar.tick();
     }
 
     bar.mark_as_completed();
@@ -329,11 +356,6 @@ void winrar::decompress(std::string filename_out)
 
     out_file.close();
 }
-
-// uint64_t winrar::decompress_p(uint8_t* input, uint32_t inputSize, std::ofstream& stream)
-// {
-//     return 0;
-// }
 
 void winrar::read_file_header()
 {
