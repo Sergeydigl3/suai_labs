@@ -1,100 +1,60 @@
 #include <iostream>
 #include <cstring>
 // #include "test.hpp"
+#include "CLI/CLI11.hpp"
 #include "winrar/winrar.hpp"
 #include <fstream>
+#include <string>
 
 using namespace std;
 
 
-// void test_write(){
-//     winrar zip7("/book.txt");
-//     zip7.compress("book.aboba");
-//     // zip7.read_file_header("crypt.csd");
-//     std::string filename = "test2.aboba";
-//     // zip7.write_file_header(filename);
-//     // zip7.read_file_header(filename);
-// }
+#define EXEC "winrar.exe"
+#define TITLE "\nFano compressor/decompressor"
+#define FOOTER \
+  "Created without <3 by Sergeydigl3 (Prokopchuk Sergey) at SUAI University"
 
-void war_write(){
-    winrar zip7("/config/workspace/suai_labs/mylabs/2course/course_work/test_data/war/war_and_peace.txt");
-    zip7.compress("/config/workspace/suai_labs/mylabs/2course/course_work/test_data/war/war_and_peace.aboba");
-}
+class Settings {
+public:
+    string file_in;
+    string file_out = "out.aboba";
+    uint64_t chunk_size = 1024;
 
-void war_read(){
-    winrar zip7("/config/workspace/suai_labs/mylabs/2course/course_work/test_data/war/war_and_peace.aboba");
-    // zip7.read_file_header();
-    zip7.decompress("/config/workspace/suai_labs/mylabs/2course/course_work/test_data/war/war_and_peace2.txt");
-}
+    bool decompress = false;
+    bool debug = false;
 
-void test_write5(){
-    winrar zip7("/config/workspace/suai_labs/mylabs/2course/course_work/test_data/kniga/kniga.txt");
-    zip7.compress("/config/workspace/suai_labs/mylabs/2course/course_work/test_data/kniga/kniga.aboba");
-}
+};
 
-void test_read5(){
-    winrar zip7("/config/workspace/suai_labs/mylabs/2course/course_work/test_data/kniga/kniga.aboba");
-    // zip7.read_file_header();
-    zip7.decompress("/config/workspace/suai_labs/mylabs/2course/course_work/test_data/kniga/kniga2.txt");
-}
+int main(int argc, char const* argv[])
+{
+    CLI::App app(TITLE, EXEC);
+    Settings config;
+    app.footer(FOOTER);
 
-void test_write6(){
-    winrar zip7("mif.jpg");
-    zip7.compress("mif.aboba");
-}
+    app.add_option("input", config.file_in, "Input file")->option_text("FILE");
+    app.add_option("output", config.file_out, "Output file")->option_text("FILE");
 
-void test_read6(){
-    winrar zip7("mif.aboba");
-    // zip7.read_file_header();
-    zip7.decompress("mif2.jpg");
-}
+    app.add_flag("-d, --dec", config.decompress, "Use decompress mode");
+    app.add_flag("--debug", config.debug, "Use debug mode");
+    app.add_option("-c, --chunk", config.chunk_size,
+        "Define chunk size (default: 1024)")->option_text("SIZE");
 
-void test_write7(){
-    winrar zip7("kruk.jpg");
-    zip7.compress("kruk.aboba");
-    return;
-}
 
-void test_read7(){
-    winrar zip7("kruk.aboba");
-    // zip7.read_file_header();
-    zip7.decompress("kruk2.jpg");
-}
+    // parse CLI arguments
+    CLI11_PARSE(app, argc, argv);
 
-void bmp_write(){
-    winrar zip7("/config/workspace/suai_labs/mylabs/2course/course_work/test_data/bmp/sample.bmp");
-    zip7.compress("/config/workspace/suai_labs/mylabs/2course/course_work/test_data/bmp/sample.aboba");
-}
-
-void bmp_read(){
-    winrar zip7("/config/workspace/suai_labs/mylabs/2course/course_work/test_data/bmp/sample.aboba");
-    zip7.decompress("/config/workspace/suai_labs/mylabs/2course/course_work/test_data/bmp/sample2.bmp");
-}
-
-void xxx_read(){
-    winrar zip7("video.aboba");
-    zip7.decompress("xxx.mp4");
-}
-
-void text_write(){
-    winrar zip7("/config/workspace/suai_labs/mylabs/2course/course_work/test_data/small_text/text.txt");
-    zip7.compress("/config/workspace/suai_labs/mylabs/2course/course_work/test_data/small_text/text.aboba");
-}
-
-void text_read(){
-    winrar zip7("/config/workspace/suai_labs/mylabs/2course/course_work/test_data/small_text/text.aboba");
-    zip7.decompress("/config/workspace/suai_labs/mylabs/2course/course_work/test_data/small_text/text2.txt");
-}
-
-int main(int argc, char const *argv[])
-{   
-    // bmp_write();
-    // bmp_read();
-    // xxx_read();
-    // text_write();
-    // text_read();
-    
-    // test_write5();
-    test_read5();
-
+    // check if no files or interactive mode specified
+    if (config.file_in.empty()) {
+        cout << "No file specified" << endl;
+        cout << "Use -h or --help to see usage" << endl;
+        return 0;
+    }
+    winrar zip7(config.file_in, config.chunk_size, config.debug);
+    if (config.decompress) {
+        zip7.decompress(config.file_out);
+    }
+    else {
+        zip7.compress(config.file_out);
+    }
+    return 0;
 }

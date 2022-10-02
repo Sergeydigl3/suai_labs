@@ -53,6 +53,8 @@ private:
     uint64_t codes_count;
     uint64_t byteSize;
     uint32_t lastSymbol = 255;
+    uint64_t chunk_size = 1024;
+    bool debug = false;
 
     std::vector<std::vector<Symbol>> codebook_optimized;
     void histogram(uint8_t* input, uint32_t size);
@@ -64,9 +66,9 @@ private:
     void initSymbol();
     uint64_t compress_p(uint8_t* input, uint64_t inputSize, BitStreamFile& stream);
 public:
-    winrar(std::string filename);
+    winrar(std::string filename, uint64_t chunk_size_p = 1024, bool debug = false);
     void compress(std::string filenameout);
     void decompress(std::string filenameout);
     void read_file_header();
-    void write_file_header(std::string filename);
+    // void write_file_header(std::string filename);
 };

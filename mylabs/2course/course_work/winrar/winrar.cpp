@@ -8,8 +8,10 @@
 #include "../indicators/indicators.hpp"
 using namespace indicators;
 
-winrar::winrar(std::string filename) {
+winrar::winrar(std::string filename, uint64_t chunk_size, bool debug) {
     filepath = filename;
+    this->chunk_size = chunk_size;
+    this->debug = debug;
 }
 
 void winrar::initSymbol() {
@@ -226,7 +228,8 @@ uint64_t winrar::compress_p(uint8_t* input, uint64_t inputSize, BitStreamFile& s
         stream.write((char*)&sym[i].Symbol, sizeof(sym[i].Symbol), 1);
         stream.write((char*)&sym[i].Bits, sizeof(sym[i].Bits), 1);
         stream.write((char*)&sym[i].Code, (sym[i].Bits + 7) / 8, 1);
-        cout << "Symbol: " << sym[i].Symbol << " Bits: " << static_cast<unsigned>(sym[i].Bits) << " Bytes: " << static_cast<unsigned>((sym[i].Bits + 7) / 8) << " Code: " << sym[i].StrCode << endl;
+        if (debug)
+            cout << "Symbol: " << sym[i].Symbol << " Bits: " << static_cast<unsigned>(sym[i].Bits) << " Bytes: " << static_cast<unsigned>((sym[i].Bits + 7) / 8) << " Code: " << sym[i].StrCode << endl;
 
         if (sym[i].Bits > max_bits)
             max_bits = sym[i].Bits;
@@ -275,7 +278,8 @@ void winrar::compress(std::string filename_out) {
 
 void winrar::decompress(std::string filename_out)
 {
-    BitStreamFileR file(filepath);
+    cout << "CHUNK_SIZE: " << chunk_size << endl;
+    BitStreamFileR file(filepath, chunk_size);
     std::ofstream out_file(filename_out, std::ios::binary);
 
 
@@ -294,7 +298,8 @@ void winrar::decompress(std::string filename_out)
 
 
         file.read((char*)&sym[symbol].Code, (sym[symbol].Bits + 7) / 8);
-        cout << "Symbol: " << symbol << " Bits: " << static_cast<unsigned>(bits) << " Bytes: " << static_cast<unsigned>((sym[symbol].Bits + 7) / 8) << " Code: " << sym[symbol].Code << endl;
+        if (debug)
+            cout << "Symbol: " << symbol << " Bits: " << static_cast<unsigned>(bits) << " Bytes: " << static_cast<unsigned>((sym[symbol].Bits + 7) / 8) << " Code: " << sym[symbol].Code << endl;
     }
 
     sort_codebook_by_code();
@@ -395,22 +400,22 @@ void winrar::read_file_header()
     }
 }
 
-void winrar::write_file_header(std::string filename)
-{
-    FILE* output = fopen(filename.c_str(), "wb");
+// void winrar::write_file_header(std::string filename)
+// {
+//     FILE* output = fopen(filename.c_str(), "wb");
 
-    FileHeader file;
-    file.filetype = 228;
-    file.compress_type = 223;
-    file.original_size = 300;
-    file.compressed_size = 900;
-    file.crc32 = 0x000000FF;
-    file.offset = sizeof(file);
-    // for (int i = 0; i < 256; i++)
-    //     file.codebook[i] = i;
+//     FileHeader file;
+//     file.filetype = 228;
+//     file.compress_type = 223;
+//     file.original_size = 300;
+//     file.compressed_size = 900;
+//     file.crc32 = 0x000000FF;
+//     file.offset = sizeof(file);
+//     // for (int i = 0; i < 256; i++)
+//     //     file.codebook[i] = i;
 
-    // write file header to file
-    fwrite(&file, sizeof(file), 1, output);
+//     // write file header to file
+//     fwrite(&file, sizeof(file), 1, output);
 
-    fclose(output);
-}
+//     fclose(output);
+// }
