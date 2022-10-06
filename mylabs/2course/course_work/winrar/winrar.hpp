@@ -8,7 +8,7 @@
 
 struct FileHeader {
     uint32_t filetype = 228;
-    uint8_t filename[100] = {0};
+    uint8_t filename[100] = { 0 };
     uint32_t compress_type = 223;
     uint32_t original_size;
     uint32_t compressed_size;
@@ -32,16 +32,16 @@ struct FileHeader {
 };
 
 typedef struct {
-	uint8_t* BytePointer;
-	uint32_t BitPosition;
+    uint8_t* BytePointer;
+    uint32_t BitPosition;
 } BitStream;
 
 typedef struct {
-	uint8_t Symbol;
-	uint64_t Count;
-	uint64_t Code;
+    uint8_t Symbol;
+    uint64_t Count;
+    uint64_t Code;
     std::string StrCode;
-	uint8_t Bits;
+    uint8_t Bits;
 } Symbol;
 
 class winrar
@@ -70,5 +70,4 @@ public:
     void compress(std::string filenameout);
     void decompress(std::string filenameout);
     void read_file_header();
-    // void write_file_header(std::string filename);
 };

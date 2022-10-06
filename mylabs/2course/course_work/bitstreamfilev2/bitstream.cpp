@@ -55,11 +55,6 @@ BitStreamFileR::BitStreamFileR(std::string filename, size_t chunk_size) {
     temp_read_value = 0;
     this->chunk_size = chunk_size;
     chunk = new char[chunk_size];
-    // file.read(chunk, chunk_size);
-    // for (int i = 0; i < chunk_size; ++i) {
-    //     cout << bitset<8>(chunk[i]) << " ";
-    // }
-    // cout << endl;
     chunk_position = 0;
 }
 
@@ -80,7 +75,7 @@ uint64_t BitStreamFileR::readBit() {
             chunk_position = 0;
         }
     }
-    // cout << bitset<8>(temp) << endl;
+
     uint64_t bit = (temp >> (7 - bitPosition)) & 1;
     temp_read_value = (temp_read_value << 1) | bit;
 

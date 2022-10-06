@@ -191,7 +191,6 @@ int winrar::codebook_optimize() {
         codebook_optimized.push_back(temp);
     }
     return max_bits;
-    // file_head.codebook_optimized_elements = j + 1;
 }
 
 uint64_t winrar::compress_p(uint8_t* input, uint64_t inputSize, BitStreamFile& stream)
@@ -326,10 +325,6 @@ void winrar::decompress(std::string filename_out)
             std::to_string(i) + "/" + std::to_string(file_head.original_size)
             });
 
-        // if (file.eof()) {
-        //     cout << "End of file" << endl;
-        //     break;
-        // }
         uint64_t code = 0;
         uint64_t count_bits = 0;
         bool code_found = false;
@@ -399,23 +394,3 @@ void winrar::read_file_header()
         }
     }
 }
-
-// void winrar::write_file_header(std::string filename)
-// {
-//     FILE* output = fopen(filename.c_str(), "wb");
-
-//     FileHeader file;
-//     file.filetype = 228;
-//     file.compress_type = 223;
-//     file.original_size = 300;
-//     file.compressed_size = 900;
-//     file.crc32 = 0x000000FF;
-//     file.offset = sizeof(file);
-//     // for (int i = 0; i < 256; i++)
-//     //     file.codebook[i] = i;
-
-//     // write file header to file
-//     fwrite(&file, sizeof(file), 1, output);
-
-//     fclose(output);
-// }
