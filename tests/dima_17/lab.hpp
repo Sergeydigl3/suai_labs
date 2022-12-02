@@ -32,11 +32,13 @@ struct Point
 template <typename T>
 class sorted_array
 {
+private:
     size_t capacity;
     T* array;
     size_t size;
+    int reverse;
 public:
-    sorted_array(size_t capacity);
+    sorted_array(size_t capacity, int reverse = 0);
     ~sorted_array();
     size_t get_size();
     T& operator[](size_t i);

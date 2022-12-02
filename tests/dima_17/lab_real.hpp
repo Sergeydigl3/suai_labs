@@ -2,11 +2,12 @@
 #include <iostream>
 
 template <typename T>
-sorted_array<T>::sorted_array(size_t capacity)
+sorted_array<T>::sorted_array(size_t capacity, int reverse)
 {
     this->capacity = capacity;
     this->array = new T[capacity];
     this->size = 0;
+    this->reverse = reverse;
 }
 
 template <typename T>
@@ -38,10 +39,20 @@ void sorted_array<T>::push(T value)
     // push with order
     size_t i = 0;
     for (; i < this->size; i++)
-    {
-        if (this->array[i] > value)
+    {   
+        if (this->reverse == 1)
         {
-            break;
+            if (this->array[i] > value)
+            {
+                break;
+            }
+        }
+        else
+        {
+            if (this->array[i] < value)
+            {
+                break;
+            }
         }
     }
     for (size_t j = this->size; j > i; j--)

@@ -6,7 +6,7 @@ using namespace std;
 
 int main(int argc, char const *argv[])
 {
-    sorted_array<int> arr(10);
+    sorted_array<int> arr(10, 1);
     arr.push(5);
     arr.push(3);
     arr.push(7);
@@ -25,7 +25,7 @@ int main(int argc, char const *argv[])
     }
     cout << endl;
 
-    sorted_array<Point> arr2(6);
+    sorted_array<Point> arr2(6, 1);
     arr2.push(Point(1, 45, 3));
     arr2.push(Point(3, 2, 1));
     arr2.push(Point(15, 1, 96));
